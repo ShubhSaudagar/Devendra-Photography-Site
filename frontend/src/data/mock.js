@@ -281,10 +281,10 @@ export const testimonials = [
 ];
 
 export const stats = [
-  { number: "300+", label: "Happy Couples" },
-  { number: "800+", label: "Events Covered" },
-  { number: "5+", label: "Years Experience" },
-  { number: "15K+", label: "Photos Captured" }
+  { number: "500+", label: "Happy Couples" },
+  { number: "1200+", label: "Events Covered" },
+  { number: "8+", label: "Years Experience" },
+  { number: "25K+", label: "Photos Captured" }
 ];
 
 export const aboutInfo = {
