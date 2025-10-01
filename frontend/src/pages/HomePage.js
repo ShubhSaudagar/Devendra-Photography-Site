@@ -12,7 +12,7 @@ import { Toaster } from "../components/ui/toaster";
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black text-white overflow-x-hidden">
       <Header />
       <Hero />
       <Services />

@@ -1,10 +1,10 @@
-// Mock data for D.S.P.Film's Photography Website
+// Mock data for D.S.P.Film's Photography Website - Updated with Real Photos and Enhanced Services
 
 export const photographerInfo = {
   name: "Devendra",
   brandName: "D.S.P.Film's",
   tagline: "Capturing Life's Precious Moments",
-  description: "Professional photographer specializing in weddings, cinematic photography, newborn & maternity sessions, and commercial projects. Based in Maharashtra, India.",
+  description: "Professional cinematographer and photographer specializing in weddings, cinematic photography, newborn & maternity sessions, and commercial projects. Based in Maharashtra, India.",
   phone: "+91 98765 43210",
   email: "contact@dspfilms.com",
   location: "Maharashtra, India",
@@ -20,52 +20,67 @@ export const services = [
   {
     id: 1,
     title: "Wedding & Events",
-    description: "Complete wedding documentation from pre-wedding shoots to reception ceremonies. Candid moments, traditional rituals, and beautiful couple portraits.",
-    features: ["Pre-wedding Shoot", "Wedding Day Coverage", "Reception Photography", "Traditional Ceremonies", "Candid Moments", "Couple Portraits"],
-    image: "https://images.unsplash.com/photo-1533091090875-1ff4acc497dd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwcGhvdG9ncmFwaHl8ZW58MHx8fHwxNzU5MzExNzgyfDA&ixlib=rb-4.1.0&q=85",
-    icon: "Heart"
+    description: "Complete wedding documentation from mehendi to reception. Candid moments, traditional rituals, and cinematic storytelling that preserves your special day forever.",
+    features: ["Mehendi & Sangeet Coverage", "Wedding Day Documentation", "Reception Photography", "Traditional Ceremonies", "Candid Moments", "Family Portraits"],
+    image: "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/ocw386dq_DEV_4405%20copy.jpg",
+    icon: "Heart",
+    color: "from-rose-600 to-pink-600"
   },
   {
     id: 2,
-    title: "Cinematic Photography",
-    description: "Dramatic, storytelling photography with cinematic composition. Perfect for creative projects, fashion shoots, and artistic portraits.",
-    features: ["Fashion Photography", "Creative Portraits", "Dramatic Lighting", "Storytelling Shots", "Artistic Compositions", "Editorial Style"],
-    image: "https://images.unsplash.com/photo-1638128807421-1fe4b5f4e7c0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwxfHxjaW5lbWF0aWMlMjBwaG90b2dyYXBoeXxlbnwwfHx8fDE3NTkzMTE3ODd8MA&ixlib=rb-4.1.0&q=85",
-    icon: "Camera"
+    title: "Pre-Wedding Shoots",
+    description: "Romantic pre-wedding photography sessions that capture your love story. Beautiful locations, creative concepts, and cinematic storytelling for couples.",
+    features: ["Location Scouting", "Creative Concepts", "Costume Guidance", "Multiple Outfit Changes", "Cinematic Shots", "Love Story Documentation"],
+    image: "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/u6ki7yo7_8X3A0072%20copy.jpg",
+    icon: "Camera",
+    color: "from-purple-600 to-indigo-600"
   },
   {
     id: 3,
-    title: "Newborn & Maternity",
-    description: "Gentle, professional photography for expecting mothers and newborn babies. Safe, comfortable environment for precious family moments.",
-    features: ["Maternity Shoots", "Newborn Photography", "Family Portraits", "Baby Milestones", "Safe Environment", "Props & Styling"],
-    image: "https://images.unsplash.com/photo-1533483595632-c5f0e57a1936?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwxfHxuZXdib3JuJTIwYmFieXxlbnwwfHx8fDE3NTkzMTE3OTN8MA&ixlib=rb-4.1.0&q=85",
-    icon: "Baby"
+    title: "Cinematic Photography",
+    description: "Dramatic, storytelling photography with cinematic composition. Perfect for creative projects, fashion shoots, and artistic portraits with a filmic approach.",
+    features: ["Fashion Photography", "Creative Portraits", "Dramatic Lighting", "Storytelling Shots", "Artistic Compositions", "Film-style Grading"],
+    image: "https://images.unsplash.com/photo-1638128807421-1fe4b5f4e7c0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwxfHxjaW5lbWF0aWMlMjBwaG90b2dyYXBoeXxlbnwwfHx8fDE3NTkzMTE3ODd8MA&ixlib=rb-4.1.0&q=85",
+    icon: "Video",
+    color: "from-emerald-600 to-teal-600"
   },
   {
     id: 4,
+    title: "Newborn & Maternity",
+    description: "Gentle, professional photography for expecting mothers and newborn babies. Safe, comfortable environment for precious family moments.",
+    features: ["Maternity Shoots", "Newborn Photography", "Family Portraits", "Baby Milestones", "Safe Environment", "Props & Styling"],
+    image: "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/tfl833jz_8X3A9993%20copy%202.jpg",
+    icon: "Baby",
+    color: "from-amber-600 to-orange-600"
+  },
+  {
+    id: 5,
     title: "Commercial & Product",
     description: "Professional commercial photography for businesses, products, and corporate events. High-quality images for marketing and branding needs.",
     features: ["Product Photography", "Corporate Events", "Business Portraits", "Marketing Content", "Brand Photography", "Professional Headshots"],
-    image: "https://images.unsplash.com/photo-1646372751563-4f2cad64dd5b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwzfHxjaW5lbWF0aWMlMjBwaG90b2dyYXBoeXxlbnwwfHx8fDE3NTkzMTE3ODd8MA&ixlib=rb-4.1.0&q=85",
-    icon: "Briefcase"
+    image: "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/2w4tfdai_8X3A0565%20copy.jpg",
+    icon: "Briefcase",
+    color: "from-slate-600 to-gray-600"
   }
 ];
 
 export const packages = [
   {
     id: 1,
-    name: "Basic Package",
+    name: "Essential Package",
     price: "₹45,000",
     duration: "6 Hours",
     category: "wedding",
     features: [
       "6 Hours Photography Coverage",
       "200+ High Resolution Photos",
-      "Basic Photo Editing",
+      "Professional Photo Editing",
       "Online Gallery Access",
-      "Mobile & Desktop Downloads"
+      "Mobile & Desktop Downloads",
+      "Social Media Ready Photos"
     ],
-    popular: false
+    popular: false,
+    color: "from-rose-500 to-pink-500"
   },
   {
     id: 2,
@@ -76,13 +91,15 @@ export const packages = [
     features: [
       "Full Day Photography Coverage",
       "400+ High Resolution Photos",
-      "Professional Photo Editing",
-      "Premium Online Gallery",
+      "Premium Photo Editing & Retouching",
+      "Cinematic Photo Gallery",
       "Physical Photo Album (50 prints)",
-      "Mobile & Desktop Downloads",
-      "2 Hours Pre-wedding Shoot"
+      "Same Day Preview (30 photos)",
+      "2 Hours Pre-wedding Shoot",
+      "USB Drive with All Photos"
     ],
-    popular: true
+    popular: true,
+    color: "from-purple-500 to-indigo-500"
   },
   {
     id: 3,
@@ -93,17 +110,37 @@ export const packages = [
     features: [
       "Complete Wedding Coverage (2 Days)",
       "600+ High Resolution Photos",
-      "Premium Photo Editing & Retouching",
+      "Premium Editing & Color Grading",
       "Luxury Photo Album (100 prints)",
       "4 Hours Pre-wedding Shoot",
       "Drone Photography (where permitted)",
-      "Same Day Preview (50 photos)",
-      "USB Drive with All Photos"
+      "Same Day Highlight Reel (50 photos)",
+      "Premium USB Drive & Online Gallery",
+      "Personal Photography Assistant"
     ],
-    popular: false
+    popular: false,
+    color: "from-emerald-500 to-teal-500"
   },
   {
     id: 4,
+    name: "Pre-Wedding Special",
+    price: "₹35,000",
+    duration: "4 Hours",
+    category: "prewedding",
+    features: [
+      "4 Hours Location Photography",
+      "100+ Edited High Resolution Photos",
+      "2 Outfit Changes",
+      "Creative Concept Development",
+      "Professional Lighting Setup",
+      "Online Gallery Access",
+      "Print Release Rights"
+    ],
+    popular: false,
+    color: "from-purple-500 to-pink-500"
+  },
+  {
+    id: 5,
     name: "Maternity Package",
     price: "₹25,000",
     duration: "2 Hours",
@@ -113,42 +150,30 @@ export const packages = [
       "50+ Edited High Resolution Photos",
       "Professional Lighting Setup",
       "Props & Styling Assistance",
+      "Partner & Family Shots",
       "Online Gallery Access",
       "Print Release Rights"
     ],
-    popular: false
-  },
-  {
-    id: 5,
-    name: "Newborn Package",
-    price: "₹20,000",
-    duration: "3 Hours",
-    category: "newborn",
-    features: [
-      "3 Hours Safe Newborn Photography",
-      "40+ Edited High Resolution Photos",
-      "Multiple Setups & Props",
-      "Family Shots Included",
-      "Online Gallery Access",
-      "Print Release Rights"
-    ],
-    popular: false
+    popular: false,
+    color: "from-amber-500 to-orange-500"
   },
   {
     id: 6,
     name: "Commercial Package",
-    price: "₹35,000",
-    duration: "4 Hours",
+    price: "₹40,000",
+    duration: "5 Hours",
     category: "commercial",
     features: [
-      "4 Hours Commercial Shoot",
-      "100+ High Resolution Photos",
+      "5 Hours Commercial Shoot",
+      "150+ High Resolution Photos",
       "Professional Editing",
       "Commercial Usage Rights",
-      "Multiple Product Setups",
-      "Fast 48-Hour Delivery"
+      "Multiple Product/Brand Setups",
+      "Fast 24-Hour Delivery",
+      "Raw Files Included"
     ],
-    popular: false
+    popular: false,
+    color: "from-slate-500 to-gray-500"
   }
 ];
 
@@ -156,79 +181,69 @@ export const portfolio = {
   wedding: [
     {
       id: 1,
-      title: "Beautiful Ring Ceremony",
-      image: "https://images.unsplash.com/photo-1533091090875-1ff4acc497dd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwcGhvdG9ncmFwaHl8ZW58MHx8fHwxNzU5MzExNzgyfDA&ixlib=rb-4.1.0&q=85",
-      category: "Wedding"
+      title: "Spectacular Wedding Celebration",
+      image: "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/ocw386dq_DEV_4405%20copy.jpg",
+      category: "Wedding Ceremony"
     },
     {
       id: 2,
-      title: "Romantic Couple Portrait",
-      image: "https://images.unsplash.com/photo-1604017011826-d3b4c23f8914?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwyfHx3ZWRkaW5nJTIwcGhvdG9ncmFwaHl8ZW58MHx8fHwxNzU5MzExNzgyfDA&ixlib=rb-4.1.0&q=85",
-      category: "Pre-Wedding"
+      title: "Traditional Bridal Portrait",
+      image: "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/2w4tfdai_8X3A0565%20copy.jpg",
+      category: "Bridal Photography"
     },
     {
       id: 3,
-      title: "Traditional Wedding Moments",
-      image: "https://images.unsplash.com/photo-1573676048035-9c2a72b6a12a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwzfHx3ZWRkaW5nJTIwcGhvdG9ncmFwaHl8ZW58MHx8fHwxNzU5MzExNzgyfDA&ixlib=rb-4.1.0&q=85",
-      category: "Ceremony"
+      title: "Romantic Couple Portrait",
+      image: "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/u6ki7yo7_8X3A0072%20copy.jpg",
+      category: "Couple Photography"
     },
     {
       id: 4,
-      title: "Beach Wedding Session",
-      image: "https://images.unsplash.com/photo-1562826772-be179f321470?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw0fHx3ZWRkaW5nJTIwcGhvdG9ncmFwaHl8ZW58MHx8fHwxNzU5MzExNzgyfDA&ixlib=rb-4.1.0&q=85",
-      category: "Destination"
+      title: "Elegant Bridal Moments",
+      image: "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/tfl833jz_8X3A9993%20copy%202.jpg",
+      category: "Bridal Portraits"
+    }
+  ],
+  prewedding: [
+    {
+      id: 1,
+      title: "Joyful Pre-Wedding Moments",
+      image: "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/u6ki7yo7_8X3A0072%20copy.jpg",
+      category: "Pre-Wedding"
+    },
+    {
+      id: 2,
+      title: "Romantic Pre-Wedding Session",
+      image: "https://images.unsplash.com/photo-1604017011826-d3b4c23f8914?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwyfHx3ZWRkaW5nJTIwcGhvdG9ncmFwaHl8ZW58MHx8fHwxNzU5MzExNzgyfDA&ixlib=rb-4.1.0&q=85",
+      category: "Outdoor Session"
     }
   ],
   cinematic: [
     {
       id: 1,
-      title: "Dramatic Silhouette",
+      title: "Cinematic Portrait",
       image: "https://images.unsplash.com/photo-1638128807421-1fe4b5f4e7c0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwxfHxjaW5lbWF0aWMlMjBwaG90b2dyYXBoeXxlbnwwfHx8fDE3NTkzMTE3ODd8MA&ixlib=rb-4.1.0&q=85",
       category: "Portrait"
     },
     {
       id: 2,
-      title: "Artistic Bird Photography",
+      title: "Artistic Composition",
       image: "https://images.unsplash.com/photo-1645672508140-31ac457f089c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwyfHxjaW5lbWF0aWMlMjBwaG90b2dyYXBoeXxlbnwwfHx8fDE3NTkzMTE3ODd8MA&ixlib=rb-4.1.0&q=85",
-      category: "Nature"
-    },
-    {
-      id: 3,
-      title: "Urban Architecture",
-      image: "https://images.unsplash.com/photo-1646372751563-4f2cad64dd5b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwzfHxjaW5lbWF0aWMlMjBwaG90b2dyYXBoeXxlbnwwfHx8fDE3NTkzMTE3ODd8MA&ixlib=rb-4.1.0&q=85",
-      category: "Commercial"
-    },
-    {
-      id: 4,
-      title: "Creative Portrait",
-      image: "https://images.pexels.com/photos/34084883/pexels-photo-34084883.jpeg",
-      category: "Fashion"
+      category: "Creative"
     }
   ],
-  newborn: [
+  maternity: [
     {
       id: 1,
-      title: "Peaceful Newborn",
-      image: "https://images.unsplash.com/photo-1533483595632-c5f0e57a1936?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwxfHxuZXdib3JuJTIwYmFieXxlbnwwfHx8fDE3NTkzMTE3OTN8MA&ixlib=rb-4.1.0&q=85",
-      category: "Newborn"
+      title: "Beautiful Maternity Moments",
+      image: "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/tfl833jz_8X3A9993%20copy%202.jpg",
+      category: "Maternity"
     },
     {
       id: 2,
-      title: "Adorable Baby Portrait",
-      image: "https://images.unsplash.com/photo-1610901158532-d246c011729e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwyfHxuZXdib3JuJTIwYmFieXxlbnwwfHx8fDE3NTkzMTE3OTN8MA&ixlib=rb-4.1.0&q=85",
-      category: "Baby"
-    },
-    {
-      id: 3,
-      title: "Tender Moments",
+      title: "Gentle Family Portraits",
       image: "https://images.unsplash.com/photo-1552819289-824d37ca69d2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwzfHxuZXdib3JuJTIwYmFieXxlbnwwfHx8fDE3NTkzMTE3OTN8MA&ixlib=rb-4.1.0&q=85",
       category: "Family"
-    },
-    {
-      id: 4,
-      title: "Baby Feet Details",
-      image: "https://images.pexels.com/photos/1973270/pexels-photo-1973270.jpeg",
-      category: "Details"
     }
   ]
 };
@@ -239,43 +254,47 @@ export const testimonials = [
     name: "Priya & Rahul Sharma",
     event: "Wedding Photography",
     rating: 5,
-    text: "Devendra captured our wedding beautifully! Every moment was perfect and the photos exceeded our expectations. Highly professional and creative.",
-    image: "https://images.unsplash.com/photo-1573676048035-9c2a72b6a12a?w=100&h=100&fit=crop&crop=face"
+    text: "Devendra's cinematic approach to our wedding photography was absolutely stunning! Every moment was captured with such artistry and emotion. The photos look like movie stills!",
+    image: "https://images.unsplash.com/photo-1573676048035-9c2a72b6a12a?w=100&h=100&fit=crop&crop=face",
+    location: "Pune, Maharashtra"
   },
   {
     id: 2,
-    name: "Anita Patil",
-    event: "Maternity Shoot",
+    name: "Anita & Suresh Patil",
+    event: "Pre-Wedding & Wedding",
     rating: 5,
-    text: "The maternity photoshoot was amazing! Devendra made me feel comfortable and the results were stunning. Beautiful memories captured forever.",
-    image: "https://images.unsplash.com/photo-1552819289-824d37ca69d2?w=100&h=100&fit=crop&crop=face"
+    text: "From our pre-wedding shoot to the wedding day, DSP Films exceeded all expectations. The attention to detail and the way they captured our traditional ceremonies was phenomenal.",
+    image: "https://images.unsplash.com/photo-1552819289-824d37ca69d2?w=100&h=100&fit=crop&crop=face",
+    location: "Mumbai, Maharashtra"
   },
   {
     id: 3,
-    name: "Mumbai Fashion Brand",
-    event: "Commercial Photography",
+    name: "Rohan & Kavya Desai",
+    event: "Maternity Photography",
     rating: 5,
-    text: "Professional, creative, and delivered exactly what we needed for our product catalog. Great experience working with D.S.P.Film's team.",
-    image: "https://images.unsplash.com/photo-1646372751563-4f2cad64dd5b?w=100&h=100&fit=crop&crop=face"
+    text: "The maternity photoshoot was a beautiful experience. Devendra made us feel so comfortable, and the results were breathtaking. We'll treasure these memories forever.",
+    image: "https://images.unsplash.com/photo-1646372751563-4f2cad64dd5b?w=100&h=100&fit=crop&crop=face",
+    location: "Nagpur, Maharashtra"
   }
 ];
 
 export const stats = [
-  { number: "200+", label: "Happy Clients" },
-  { number: "500+", label: "Events Covered" },
+  { number: "300+", label: "Happy Couples" },
+  { number: "800+", label: "Events Covered" },
   { number: "5+", label: "Years Experience" },
-  { number: "10K+", label: "Photos Captured" }
+  { number: "15K+", label: "Photos Captured" }
 ];
 
 export const aboutInfo = {
   title: "Meet Devendra",
-  subtitle: "Professional Photographer & Visual Storyteller",
-  description: "With over 5 years of experience in photography, I specialize in capturing life's most precious moments. From intimate wedding ceremonies to professional commercial shoots, I bring passion and creativity to every project. Based in Maharashtra, I serve clients across India with a focus on authentic storytelling through imagery.",
+  subtitle: "Cinematic Photographer & Visual Storyteller",
+  description: "With over 5 years of experience in cinematic photography and videography, I specialize in capturing life's most precious moments with an artistic eye. From intimate wedding ceremonies to grand celebrations, I bring passion, creativity, and technical expertise to every project. Based in Maharashtra, I serve clients across India with a focus on authentic storytelling through stunning visuals.",
   achievements: [
     "5+ Years Professional Experience",
-    "200+ Satisfied Clients",
-    "Specialized in 4 Photography Categories",
-    "Published in Local Photography Magazines"
+    "300+ Satisfied Couples",
+    "Specialized in Cinematic Photography",
+    "Featured in Wedding Photography Magazines",
+    "Expert in Traditional Indian Weddings"
   ],
   image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop&crop=face"
 };
