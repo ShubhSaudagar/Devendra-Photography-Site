@@ -1,18 +1,19 @@
 import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Check, Star } from "lucide-react";
+import { Check, Star, Sparkles, Crown, ArrowRight } from "lucide-react";
 import { packages } from "../data/mock";
 
 const Packages = () => {
   const [selectedCategory, setSelectedCategory] = useState('wedding');
+  const [hoveredPackage, setHoveredPackage] = useState(null);
 
   const categories = [
-    { id: 'wedding', label: 'Wedding Packages' },
-    { id: 'maternity', label: 'Maternity' },
-    { id: 'newborn', label: 'Newborn' },
-    { id: 'commercial', label: 'Commercial' }
+    { id: 'wedding', label: 'Wedding Packages', color: 'from-rose-500 to-pink-500' },
+    { id: 'prewedding', label: 'Pre-Wedding', color: 'from-purple-500 to-indigo-500' },
+    { id: 'maternity', label: 'Maternity', color: 'from-amber-500 to-orange-500' },
+    { id: 'commercial', label: 'Commercial', color: 'from-slate-500 to-gray-500' }
   ];
 
   const filteredPackages = packages.filter(pkg => 
@@ -26,76 +27,145 @@ const Packages = () => {
     }
   };
 
+  const getPackageIcon = (packageName) => {
+    if (packageName.includes('Luxury') || packageName.includes('Premium')) {
+      return <Crown size={20} />;
+    }
+    if (packageName.includes('Special')) {
+      return <Sparkles size={20} />;
+    }
+    return <Star size={20} />;
+  };
+
   return (
-    <section id="packages" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="packages" className="py-20 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900/40 to-black"></div>
+      <div className="absolute top-40 left-20 w-72 h-72 bg-rose-600/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-20 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl"></div>
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Photography Packages
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-rose-600/20 to-pink-600/20 border border-white/10 backdrop-blur-lg mb-6">
+            <span className="text-sm font-medium text-rose-300">Pricing</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            <span className="bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
+              Photography Packages
+            </span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-8">
             Choose the perfect package for your photography needs. All packages include professional editing and high-resolution images.
           </p>
           
           {/* Category Tabs */}
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-3">
             {categories.map((category) => (
               <Button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                variant={selectedCategory === category.id ? "default" : "outline"}
-                className={selectedCategory === category.id ? 'bg-gray-900 text-white' : 'border-gray-300'}
+                variant="ghost"
+                className={`group relative px-6 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 ${
+                  selectedCategory === category.id 
+                    ? 'text-white' 
+                    : 'text-gray-400 hover:text-white'
+                }`}
               >
-                {category.label}
+                {/* Background */}
+                <div className={`absolute inset-0 rounded-full transition-all duration-300 ${
+                  selectedCategory === category.id
+                    ? `bg-gradient-to-r ${category.color} shadow-lg`
+                    : 'bg-white/5 group-hover:bg-white/10 backdrop-blur-lg border border-white/10'
+                }`}></div>
+                
+                <span className="relative z-10">{category.label}</span>
               </Button>
             ))}
           </div>
         </div>
 
         {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredPackages.map((pkg) => (
-            <Card key={pkg.id} className={`relative transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${
-              pkg.popular ? 'ring-2 ring-gray-900 shadow-xl' : 'shadow-md'
-            }`}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {filteredPackages.map((pkg, index) => (
+            <Card 
+              key={pkg.id} 
+              className={`group relative border-0 bg-transparent transition-all duration-500 transform hover:scale-105 ${
+                pkg.popular ? 'lg:scale-110' : ''
+              }`}
+              onMouseEnter={() => setHoveredPackage(pkg.id)}
+              onMouseLeave={() => setHoveredPackage(null)}
+              style={{ animationDelay: `${index * 150}ms` }}
+            >
+              {/* Background Gradient */}
+              <div className={`absolute inset-0 rounded-3xl bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-lg border border-white/20 transition-all duration-500 ${
+                hoveredPackage === pkg.id ? 'border-white/30 shadow-2xl' : ''
+              }`}></div>
+              
+              {/* Popular Badge */}
               {pkg.popular && (
-                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-1">
-                  <Star className="w-3 h-3 mr-1" />
-                  Most Popular
-                </Badge>
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
+                  <Badge className={`bg-gradient-to-r ${pkg.color} text-white px-4 py-2 rounded-full shadow-lg flex items-center animate-pulse`}>
+                    <Star className="w-4 h-4 mr-2 fill-current" />
+                    Most Popular
+                  </Badge>
+                </div>
               )}
               
-              <CardHeader className="text-center pb-4">
-                <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
-                  {pkg.name}
-                </CardTitle>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold text-gray-900">{pkg.price}</span>
-                  <div className="text-sm text-gray-600 mt-1">{pkg.duration}</div>
+              <CardContent className="relative z-10 p-8 h-full flex flex-col">
+                {/* Package Header */}
+                <div className="text-center mb-8">
+                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r ${pkg.color} mb-4 shadow-lg`}>
+                    <div className="text-white">
+                      {getPackageIcon(pkg.name)}
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    {pkg.name}
+                  </h3>
+                  
+                  <div className="mb-4">
+                    <span className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                      {pkg.price}
+                    </span>
+                    <div className="text-sm text-gray-400 mt-1">{pkg.duration}</div>
+                  </div>
                 </div>
-              </CardHeader>
-              
-              <CardContent>
-                <ul className="space-y-3 mb-8">
-                  {pkg.features.map((feature, index) => (
-                    <li key={index} className="flex items-center text-sm text-gray-600">
-                      <Check className="w-4 h-4 text-green-500 mr-3 flex-shrink-0" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
                 
+                {/* Features List */}
+                <div className="flex-1 mb-8">
+                  <ul className="space-y-4">
+                    {pkg.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-start text-sm text-gray-300">
+                        <div className="flex-shrink-0 mr-3 mt-0.5">
+                          <div className={`w-5 h-5 rounded-full bg-gradient-to-r ${pkg.color} flex items-center justify-center`}>
+                            <Check className="w-3 h-3 text-white" />
+                          </div>
+                        </div>
+                        <span className="leading-relaxed">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                {/* CTA Button */}
                 <Button 
                   onClick={scrollToContact}
-                  className={`w-full ${
+                  className={`group relative w-full py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
                     pkg.popular 
-                      ? 'bg-gray-900 hover:bg-gray-800 text-white' 
-                      : 'border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white'
+                      ? `bg-gradient-to-r ${pkg.color} hover:shadow-lg text-white` 
+                      : 'bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40'
                   }`}
-                  variant={pkg.popular ? "default" : "outline"}
                 >
-                  Book This Package
+                  <span className="flex items-center justify-center">
+                    Book This Package
+                    <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-200" size={16} />
+                  </span>
+                  
+                  {pkg.popular && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -103,20 +173,29 @@ const Packages = () => {
         </div>
 
         {/* Custom Package CTA */}
-        <div className="mt-16 text-center">
-          <div className="bg-gray-50 rounded-2xl p-8 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Need a Custom Package?
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Every event is unique. Let's discuss your specific needs and create a personalized photography package that fits your vision and budget.
-            </p>
-            <Button 
-              onClick={scrollToContact}
-              className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-3"
-            >
-              Get Custom Quote
-            </Button>
+        <div className="text-center">
+          <div className="relative max-w-2xl mx-auto">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-3xl blur-xl"></div>
+            <div className="relative bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-lg border border-white/20 rounded-3xl p-8">
+              <div className="flex items-center justify-center mb-4">
+                <Sparkles className="text-purple-400 mr-3" size={24} />
+                <h3 className="text-2xl font-bold text-white">
+                  Need a Custom Package?
+                </h3>
+              </div>
+              <p className="text-gray-400 mb-6 leading-relaxed">
+                Every event is unique. Let's discuss your specific needs and create a personalized photography package that fits your vision and budget.
+              </p>
+              <Button 
+                onClick={scrollToContact}
+                className="group bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                <span className="flex items-center">
+                  Get Custom Quote
+                  <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-200" size={16} />
+                </span>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

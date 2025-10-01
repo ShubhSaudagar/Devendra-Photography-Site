@@ -1,58 +1,105 @@
 import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Heart, Camera, Baby, Briefcase } from "lucide-react";
+import { Card, CardContent } from "./ui/card";
+import { Heart, Camera, Baby, Briefcase, Video, ArrowRight } from "lucide-react";
 import { services } from "../data/mock";
 
 const iconMap = {
   Heart: Heart,
   Camera: Camera,
   Baby: Baby,
-  Briefcase: Briefcase
+  Briefcase: Briefcase,
+  Video: Video
 };
 
 const Services = () => {
   return (
-    <section id="services" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="services" className="py-20 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900/50 to-black"></div>
+      <div className="absolute top-40 left-10 w-72 h-72 bg-purple-600/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl"></div>
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Our Photography Services
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-white/10 backdrop-blur-lg mb-6">
+            <span className="text-sm font-medium text-purple-300">Our Expertise</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            <span className="bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
+              Photography Services
+            </span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Specializing in capturing life's most precious moments with professional expertise and creative vision.
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            Specializing in capturing life's most precious moments with professional expertise, 
+            cinematic vision, and artistic storytelling.
           </p>
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {services.map((service) => {
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+          {services.map((service, index) => {
             const IconComponent = iconMap[service.icon];
+            
             return (
-              <Card key={service.id} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-md hover:-translate-y-2">
-                <CardHeader className="text-center pb-4">
-                  <div className="mx-auto mb-4 p-4 bg-gray-100 rounded-full group-hover:bg-gray-900 transition-colors duration-300">
-                    <IconComponent className="h-8 w-8 text-gray-900 group-hover:text-white" />
+              <Card key={service.id} className="group relative overflow-hidden border-0 bg-transparent hover:transform hover:scale-105 transition-all duration-500">
+                {/* Service Image Background */}
+                <div className="absolute inset-0">
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center transform scale-110 group-hover:scale-125 transition-transform duration-700"
+                    style={{ backgroundImage: `url(${service.image})` }}
+                  ></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/40 group-hover:from-black/90 group-hover:via-black/70 transition-all duration-500"></div>
+                </div>
+
+                <CardContent className="relative z-10 p-8 h-96 flex flex-col justify-end">
+                  {/* Icon */}
+                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r ${service.color} mb-6 transform group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                    <IconComponent className="text-white" size={28} />
                   </div>
-                  <CardTitle className="text-xl font-bold text-gray-900">
-                    {service.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <CardDescription className="text-gray-600 mb-6">
-                    {service.description}
-                  </CardDescription>
-                  <div className="space-y-2">
-                    {service.features.slice(0, 3).map((feature, index) => (
-                      <div key={index} className="text-sm text-gray-500">
-                        • {feature}
-                      </div>
-                    ))}
+                  
+                  {/* Content */}
+                  <div className="space-y-4">
+                    <h3 className="text-2xl font-bold text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 group-hover:bg-clip-text transition-all duration-300">
+                      {service.title}
+                    </h3>
+                    
+                    <p className="text-gray-300 text-sm leading-relaxed">
+                      {service.description}
+                    </p>
+                    
+                    {/* Features Preview */}
+                    <div className="space-y-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
+                      {service.features.slice(0, 3).map((feature, featureIndex) => (
+                        <div key={featureIndex} className="flex items-center text-xs text-gray-400">
+                          <div className="w-1.5 h-1.5 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mr-2"></div>
+                          {feature}
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Learn More Button */}
+                    <button className="inline-flex items-center text-sm font-medium text-white opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-200 hover:text-purple-400">
+                      Learn More
+                      <ArrowRight size={16} className="ml-2 transform group-hover:translate-x-1 transition-transform duration-200" />
+                    </button>
                   </div>
                 </CardContent>
+
+                {/* Glassmorphism Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm"></div>
               </Card>
             );
           })}
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="text-center mt-16">
+          <div className="inline-flex items-center px-8 py-4 rounded-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-white/10 backdrop-blur-lg hover:from-purple-600/30 hover:to-pink-600/30 transition-all duration-300 cursor-pointer group">
+            <Camera className="mr-3 text-purple-400 group-hover:scale-110 transition-transform duration-200" size={20} />
+            <span className="text-white font-medium">Need something custom? Let's create it together</span>
+            <ArrowRight className="ml-3 text-pink-400 group-hover:translate-x-1 transition-transform duration-200" size={20} />
+          </div>
         </div>
       </div>
     </section>
