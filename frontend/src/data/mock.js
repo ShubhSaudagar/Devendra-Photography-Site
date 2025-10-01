@@ -288,15 +288,16 @@ export const stats = [
 ];
 
 export const aboutInfo = {
-  title: "Meet Devendra",
+  title: "Meet Devendra S. Shinde",
   subtitle: "Cinematic Photographer & Visual Storyteller",
-  description: "With over 5 years of experience in cinematic photography and videography, I specialize in capturing life's most precious moments with an artistic eye. From intimate wedding ceremonies to grand celebrations, I bring passion, creativity, and technical expertise to every project. Based in Maharashtra, I serve clients across India with a focus on authentic storytelling through stunning visuals.",
+  description: "With over 8 years of experience since February 2017 in cinematic photography and videography, I specialize in capturing life's most precious moments with an artistic eye. From intimate wedding ceremonies to grand celebrations, I bring passion, creativity, and technical expertise to every project. Based in Ahilyanagar, Maharashtra, I serve clients across India with a focus on authentic storytelling through stunning visuals.",
   achievements: [
-    "5+ Years Professional Experience",
-    "300+ Satisfied Couples",
+    "8+ Years Professional Experience (Since Feb 2017)",
+    "500+ Satisfied Couples",
     "Specialized in Cinematic Photography",
     "Featured in Wedding Photography Magazines",
-    "Expert in Traditional Indian Weddings"
+    "Expert in Traditional Indian Weddings",
+    "Based in Ahilyanagar, Maharashtra"
   ],
   image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop&crop=face"
 };
