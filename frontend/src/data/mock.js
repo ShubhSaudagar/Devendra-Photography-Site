@@ -1,14 +1,16 @@
 // Mock data for D.S.P.Film's Photography Website - Updated with Real Photos and Enhanced Services
 
 export const photographerInfo = {
-  name: "Devendra",
+  name: "Devendra S. Shinde",
   brandName: "D.S.P.Film's",
   tagline: "Capturing Life's Precious Moments",
-  description: "Professional cinematographer and photographer specializing in weddings, cinematic photography, newborn & maternity sessions, and commercial projects. Based in Maharashtra, India.",
-  phone: "+91 98765 43210",
+  description: "Professional cinematographer and photographer specializing in weddings, cinematic photography, newborn & maternity sessions, and commercial projects. Based in Ahilyanagar, Maharashtra, India.",
+  phone: "+91 8308398378",
   email: "contact@dspfilms.com",
-  location: "Maharashtra, India",
-  experience: "5+ Years",
+  location: "Ahilyanagar City, Maharashtra, India",
+  officeAddress: "1st floor, above Ola EV showroom, opp. Shilpa Garden, Nagar - Pune Highway, Ahilyanagar - 414001",
+  experience: "8+ Years",
+  experienceStart: "February 2017",
   social: {
     instagram: "https://www.instagram.com/d.s.p.films/",
     facebook: "#",
