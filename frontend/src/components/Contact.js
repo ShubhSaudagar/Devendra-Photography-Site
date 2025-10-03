@@ -20,6 +20,39 @@ const Contact = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [siteContent, setSiteContent] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await contentAPI.getAll();
+        const organizedContent = organizeContent(response.data);
+        setSiteContent(organizedContent);
+      } catch (error) {
+        console.error('Error fetching content:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContent();
+  }, []);
+
+  // Get photographer info from site content with defaults
+  const photographerInfo = {
+    name: siteContent.contact?.name || "Devendra S. Shinde",
+    brandName: siteContent.hero?.brand_name || "D.S.P.Film's",
+    phone: siteContent.contact?.phone || "+91 8308398378",
+    email: siteContent.contact?.email || "contact@dspfilms.com",
+    location: siteContent.contact?.location || "Ahilyanagar City, Maharashtra, India",
+    officeAddress: siteContent.contact?.office_address || "1st floor, above Ola EV showroom, opp. Shilpa Garden, Nagar - Pune Highway, Ahilyanagar - 414001",
+    social: {
+      instagram: siteContent.social?.instagram || "https://www.instagram.com/d.s.p.films/",
+      facebook: siteContent.social?.facebook || "#",
+      youtube: siteContent.social?.youtube || "#"
+    }
+  };
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
