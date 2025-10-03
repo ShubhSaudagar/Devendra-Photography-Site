@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, Camera } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 
 const Header = () => {
@@ -43,14 +43,12 @@ const Header = () => {
             {/* Logo */}
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur-sm opacity-70"></div>
-                <div className="relative bg-black rounded-lg p-2">
-                  <Camera className="w-6 h-6 text-white" />
-                </div>
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/gqst9x71_DSP%20logo.png"
+                  alt="DSP Films Logo"
+                  className="h-12 w-auto object-contain filter brightness-0 invert"
+                />
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                D.S.P.Film's
-              </h1>
             </div>
 
             {/* Desktop Navigation */}
@@ -115,7 +113,6 @@ const Header = () => {
         )}
       </header>
       
-      {/* Spacer for fixed header */}
       <div className="h-20"></div>
     </>
   );
