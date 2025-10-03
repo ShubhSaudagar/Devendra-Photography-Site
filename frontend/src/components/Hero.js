@@ -20,6 +20,13 @@ const Hero = () => {
   ]);
   const [loading, setLoading] = useState(true);
 
+  // Default photographer info (will be updated from API)
+  const photographerInfo = {
+    brandName: siteContent.brandName || "Capture Moments",
+    tagline: siteContent.tagline || "Timeless Photography & Cinematic Films",
+    description: siteContent.description || "Creating beautiful memories that last a lifetime through artistic photography and cinematic storytelling."
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
