@@ -39,7 +39,7 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section id="testimonials" className="py-20 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900/30 to-black"></div>
       <div className="absolute top-40 left-10 w-80 h-80 bg-teal-600/10 rounded-full blur-3xl"></div>
