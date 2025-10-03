@@ -23,7 +23,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { photographerInfo, packages, testimonials, portfolio } from "../data/mock";
 import ThemeManager from "../components/admin/ThemeManager";
-import ThemeManager from "../components/ThemeManager";
 
 const AdminPortal = () => {
   const navigate = useNavigate();
