@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Eye, Heart, Share2, ArrowRight } from "lucide-react";
-import { portfolio } from "../data/mock";
+import { portfolioAPI, organizePortfolio } from "../services/api";
 
 const Portfolio = () => {
   const [activeCategory, setActiveCategory] = useState('wedding');
