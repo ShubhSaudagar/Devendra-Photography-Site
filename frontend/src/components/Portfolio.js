@@ -37,9 +37,9 @@ const Portfolio = () => {
 
   if (loading) {
     return (
-      <section id=\"portfolio\" className=\"py-20 relative overflow-hidden\">
-        <div className=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center\">
-          <div className=\"text-white\">Loading portfolio...</div>
+      <section id="portfolio" className="py-20 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="text-white">Loading portfolio...</div>
         </div>
       </section>
     );
