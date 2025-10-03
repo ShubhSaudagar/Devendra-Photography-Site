@@ -1,1 +1,160 @@
-import axios from \"axios\";\n\nconst BACKEND_URL = process.env.REACT_APP_BACKEND_URL;\nconst API = `${BACKEND_URL}/api`;\n\n// Create axios instance with default config\nconst apiClient = axios.create({\n  baseURL: API,\n  headers: {\n    'Content-Type': 'application/json',\n  },\n});\n\n// Add request interceptor for error handling\napiClient.interceptors.response.use(\n  (response) => response,\n  (error) => {\n    console.error('API Error:', error.response?.data || error.message);\n    throw error;\n  }\n);\n\n// Content Management APIs\nexport const contentAPI = {\n  getAll: () => apiClient.get('/content'),\n  getBySection: (section) => apiClient.get(`/content/${section}`),\n  create: (content) => apiClient.post('/content', content),\n  update: (id, content) => apiClient.put(`/content/${id}`, content),\n};\n\n// Services APIs\nexport const servicesAPI = {\n  getAll: () => apiClient.get('/services'),\n  create: (service) => apiClient.post('/services', service),\n  update: (id, service) => apiClient.put(`/services/${id}`, service),\n  delete: (id) => apiClient.delete(`/services/${id}`),\n};\n\n// Portfolio APIs\nexport const portfolioAPI = {\n  getAll: () => apiClient.get('/portfolio'),\n  getByCategory: (category) => apiClient.get(`/portfolio/${category}`),\n  create: (portfolio) => apiClient.post('/portfolio', portfolio),\n  update: (id, portfolio) => apiClient.put(`/portfolio/${id}`, portfolio),\n  delete: (id) => apiClient.delete(`/portfolio/${id}`),\n};\n\n// Packages APIs\nexport const packagesAPI = {\n  getAll: () => apiClient.get('/packages'),\n  getByCategory: (category) => apiClient.get(`/packages/${category}`),\n  create: (package_) => apiClient.post('/packages', package_),\n  update: (id, package_) => apiClient.put(`/packages/${id}`, package_),\n  delete: (id) => apiClient.delete(`/packages/${id}`),\n};\n\n// Testimonials APIs\nexport const testimonialsAPI = {\n  getAll: () => apiClient.get('/testimonials'),\n  create: (testimonial) => apiClient.post('/testimonials', testimonial),\n  update: (id, testimonial) => apiClient.put(`/testimonials/${id}`, testimonial),\n  delete: (id) => apiClient.delete(`/testimonials/${id}`),\n};\n\n// Inquiries APIs\nexport const inquiriesAPI = {\n  getAll: () => apiClient.get('/inquiries'),\n  create: (inquiry) => apiClient.post('/inquiries', inquiry),\n  update: (id, data) => apiClient.put(`/inquiries/${id}`, data),\n  delete: (id) => apiClient.delete(`/inquiries/${id}`),\n};\n\n// Helper function to organize content by section and key\nexport const organizeContent = (contentArray) => {\n  const organized = {};\n  \n  contentArray.forEach(item => {\n    if (!organized[item.section]) {\n      organized[item.section] = {};\n    }\n    organized[item.section][item.key] = item.value;\n  });\n  \n  return organized;\n};\n\n// Helper function to organize portfolio by category\nexport const organizePortfolio = (portfolioArray) => {\n  const organized = {\n    wedding: [],\n    prewedding: [],\n    cinematic: [],\n    maternity: []\n  };\n  \n  portfolioArray.forEach(item => {\n    if (organized[item.category]) {\n      organized[item.category].push({\n        id: item._id,\n        title: item.title,\n        image: item.image,\n        category: item.description || item.category\n      });\n    }\n  });\n  \n  return organized;\n};\n\n// Helper function to format services data\nexport const formatServices = (servicesArray) => {\n  return servicesArray.map(service => ({\n    id: service._id,\n    title: service.title,\n    description: service.description,\n    features: service.features,\n    image: service.image,\n    icon: service.icon,\n    color: service.color\n  }));\n};\n\n// Helper function to format packages data\nexport const formatPackages = (packagesArray) => {\n  return packagesArray.map(pkg => ({\n    id: pkg._id,\n    name: pkg.name,\n    price: pkg.price,\n    duration: pkg.duration,\n    category: pkg.category,\n    features: pkg.features,\n    popular: pkg.popular,\n    color: pkg.color\n  }));\n};\n\n// Helper function to format testimonials data\nexport const formatTestimonials = (testimonialsArray) => {\n  return testimonialsArray.map(testimonial => ({\n    id: testimonial._id,\n    name: testimonial.name,\n    event: testimonial.event,\n    rating: testimonial.rating,\n    text: testimonial.text,\n    image: testimonial.image,\n    location: testimonial.location\n  }));\n};\n\n// Main API object for easy importing\nexport const API_SERVICES = {\n  content: contentAPI,\n  services: servicesAPI,\n  portfolio: portfolioAPI,\n  packages: packagesAPI,\n  testimonials: testimonialsAPI,\n  inquiries: inquiriesAPI,\n};\n\nexport default API_SERVICES;
+import axios from \"axios\";
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
+
+// Create axios instance with default config
+const apiClient = axios.create({
+  baseURL: API,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Add request interceptor for error handling
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Error:', error.response?.data || error.message);
+    throw error;
+  }
+);
+
+// Content Management APIs
+export const contentAPI = {
+  getAll: () => apiClient.get('/content'),
+  getBySection: (section) => apiClient.get(`/content/${section}`),
+  create: (content) => apiClient.post('/content', content),
+  update: (id, content) => apiClient.put(`/content/${id}`, content),
+};
+
+// Services APIs
+export const servicesAPI = {
+  getAll: () => apiClient.get('/services'),
+  create: (service) => apiClient.post('/services', service),
+  update: (id, service) => apiClient.put(`/services/${id}`, service),
+  delete: (id) => apiClient.delete(`/services/${id}`),
+};
+
+// Portfolio APIs
+export const portfolioAPI = {
+  getAll: () => apiClient.get('/portfolio'),
+  getByCategory: (category) => apiClient.get(`/portfolio/${category}`),
+  create: (portfolio) => apiClient.post('/portfolio', portfolio),
+  update: (id, portfolio) => apiClient.put(`/portfolio/${id}`, portfolio),
+  delete: (id) => apiClient.delete(`/portfolio/${id}`),
+};
+
+// Packages APIs
+export const packagesAPI = {
+  getAll: () => apiClient.get('/packages'),
+  getByCategory: (category) => apiClient.get(`/packages/${category}`),
+  create: (package_) => apiClient.post('/packages', package_),
+  update: (id, package_) => apiClient.put(`/packages/${id}`, package_),
+  delete: (id) => apiClient.delete(`/packages/${id}`),
+};
+
+// Testimonials APIs
+export const testimonialsAPI = {
+  getAll: () => apiClient.get('/testimonials'),
+  create: (testimonial) => apiClient.post('/testimonials', testimonial),
+  update: (id, testimonial) => apiClient.put(`/testimonials/${id}`, testimonial),
+  delete: (id) => apiClient.delete(`/testimonials/${id}`),
+};
+
+// Inquiries APIs
+export const inquiriesAPI = {
+  getAll: () => apiClient.get('/inquiries'),
+  create: (inquiry) => apiClient.post('/inquiries', inquiry),
+  update: (id, data) => apiClient.put(`/inquiries/${id}`, data),
+  delete: (id) => apiClient.delete(`/inquiries/${id}`),
+};
+
+// Helper function to organize content by section and key
+export const organizeContent = (contentArray) => {
+  const organized = {};
+  
+  contentArray.forEach(item => {
+    if (!organized[item.section]) {
+      organized[item.section] = {};
+    }
+    organized[item.section][item.key] = item.value;
+  });
+  
+  return organized;
+};
+
+// Helper function to organize portfolio by category
+export const organizePortfolio = (portfolioArray) => {
+  const organized = {
+    wedding: [],
+    prewedding: [],
+    cinematic: [],
+    maternity: []
+  };
+  
+  portfolioArray.forEach(item => {
+    if (organized[item.category]) {
+      organized[item.category].push({
+        id: item._id,
+        title: item.title,
+        image: item.image,
+        category: item.description || item.category
+      });
+    }
+  });
+  
+  return organized;
+};
+
+// Helper function to format services data
+export const formatServices = (servicesArray) => {
+  return servicesArray.map(service => ({
+    id: service._id,
+    title: service.title,
+    description: service.description,
+    features: service.features,
+    image: service.image,
+    icon: service.icon,
+    color: service.color
+  }));
+};
+
+// Helper function to format packages data
+export const formatPackages = (packagesArray) => {
+  return packagesArray.map(pkg => ({
+    id: pkg._id,
+    name: pkg.name,
+    price: pkg.price,
+    duration: pkg.duration,
+    category: pkg.category,
+    features: pkg.features,
+    popular: pkg.popular,
+    color: pkg.color
+  }));
+};
+
+// Helper function to format testimonials data
+export const formatTestimonials = (testimonialsArray) => {
+  return testimonialsArray.map(testimonial => ({
+    id: testimonial._id,
+    name: testimonial.name,
+    event: testimonial.event,
+    rating: testimonial.rating,
+    text: testimonial.text,
+    image: testimonial.image,
+    location: testimonial.location
+  }));
+};
+
+// Main API object for easy importing
+export const API_SERVICES = {
+  content: contentAPI,
+  services: servicesAPI,
+  portfolio: portfolioAPI,
+  packages: packagesAPI,
+  testimonials: testimonialsAPI,
+  inquiries: inquiriesAPI,
+};
+
+export default API_SERVICES;
