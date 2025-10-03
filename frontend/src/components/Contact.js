@@ -62,8 +62,10 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Mock form submission with loading state
-    setTimeout(() => {
+    try {
+      // Real form submission to API
+      await inquiriesAPI.create(formData);
+      
       toast({
         title: "Inquiry Submitted Successfully!",
         description: "Thank you for your interest. We'll get back to you within 24 hours.",
@@ -78,8 +80,16 @@ const Contact = () => {
         eventDate: '',
         message: ''
       });
+    } catch (error) {
+      console.error('Error submitting inquiry:', error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your inquiry. Please try again or contact us directly.",
+        variant: "destructive"
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   const contactMethods = [
