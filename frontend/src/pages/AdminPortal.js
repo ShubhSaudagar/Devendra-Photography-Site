@@ -437,68 +437,7 @@ const AdminPortal = () => {
 
           {/* Settings Tab */}
           <TabsContent value="settings" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Business Settings</CardTitle>
-                <CardDescription>Update your business information and contact details</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="brandName">Brand Name</Label>
-                    <Input 
-                      id="brandName"
-                      defaultValue={photographerInfo.brandName}
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input 
-                      id="phone"
-                      defaultValue={photographerInfo.phone}
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input 
-                      id="email"
-                      defaultValue={photographerInfo.email}
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="location">Location</Label>
-                    <Input 
-                      id="location"
-                      defaultValue={photographerInfo.location}
-                    />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="description">Business Description</Label>
-                  <Textarea 
-                    id="description"
-                    defaultValue={photographerInfo.description}
-                    rows={4}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="tagline">Tagline</Label>
-                  <Input 
-                    id="tagline"
-                    defaultValue={photographerInfo.tagline}
-                  />
-                </div>
-                
-                <Button className="w-full md:w-auto">
-                  Save Settings
-                </Button>
-              </CardContent>
-            </Card>
+            <ThemeManager />
           </TabsContent>
         </Tabs>
       </div>
