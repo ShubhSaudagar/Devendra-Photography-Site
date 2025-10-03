@@ -5,13 +5,51 @@ import { contentAPI, portfolioAPI, organizeContent } from "../services/api";
 
 const Hero = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
-  const heroImages = [
+  const [siteContent, setSiteContent] = useState({});
+  const [heroImages, setHeroImages] = useState([
     "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/ocw386dq_DEV_4405%20copy.jpg",
     "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/u6ki7yo7_8X3A0072%20copy.jpg",
     "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/2w4tfdai_8X3A0565%20copy.jpg",
     "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/tfl833jz_8X3A9993%20copy%202.jpg"
-  ];
+  ]);
+  const [stats, setStats] = useState([
+    { number: "500+", label: "Happy Couples" },
+    { number: "1200+", label: "Events Covered" },
+    { number: "8+", label: "Years Experience" },
+    { number: "25K+", label: "Photos Captured" }
+  ]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [contentResponse, portfolioResponse] = await Promise.all([
+          contentAPI.getAll(),
+          portfolioAPI.getAll()
+        ]);
+        
+        const organizedContent = organizeContent(contentResponse.data);
+        setSiteContent(organizedContent);
+        
+        // Update hero images from portfolio
+        const portfolioImages = portfolioResponse.data
+          .filter(item => item.image)
+          .slice(0, 4)
+          .map(item => item.image);
+        
+        if (portfolioImages.length > 0) {
+          setHeroImages(portfolioImages);
+        }
+        
+      } catch (error) {
+        console.error('Error fetching hero data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
