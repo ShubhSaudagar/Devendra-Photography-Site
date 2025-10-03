@@ -20,11 +20,11 @@ const Hero = () => {
   ]);
   const [loading, setLoading] = useState(true);
 
-  // Default photographer info (will be updated from API)
+  // Get photographer info from site content with defaults
   const photographerInfo = {
-    brandName: siteContent.brandName || "Capture Moments",
-    tagline: siteContent.tagline || "Timeless Photography & Cinematic Films",
-    description: siteContent.description || "Creating beautiful memories that last a lifetime through artistic photography and cinematic storytelling."
+    brandName: siteContent.hero?.brand_name || "D.S.P.Film's",
+    tagline: siteContent.hero?.tagline || "Capturing Life's Precious Moments", 
+    description: siteContent.hero?.description || "Professional cinematographer and photographer specializing in weddings, cinematic photography, newborn & maternity sessions, and commercial projects. Based in Ahilyanagar, Maharashtra, India."
   };
 
   useEffect(() => {
