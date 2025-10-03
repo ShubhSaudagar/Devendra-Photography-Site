@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Label } from "./ui/label";
 import { toast } from "../hooks/use-toast";
 import { Phone, Mail, MapPin, Clock, Instagram, Facebook, Youtube, Send, Building2, ArrowRight } from "lucide-react";
-import { photographerInfo } from "../data/mock";
+import { contentAPI, inquiriesAPI, organizeContent } from "../services/api";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
