@@ -340,7 +340,7 @@ const Contact = () => {
                       )}
                     </span>
                     {!isSubmitting && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-xl blur opacity-30 group-hover:opacity-50 transition-opacity duration-300 -z-10"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-xl blur opacity-30 group-hover:opacity-50 transition-opacity duration-300 pointer-events-none"></div>
                     )}
                   </Button>
                 </form>
