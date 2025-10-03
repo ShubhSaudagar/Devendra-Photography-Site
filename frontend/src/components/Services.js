@@ -12,6 +12,35 @@ const iconMap = {
 };
 
 const Services = () => {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await servicesAPI.getAll();
+        const formattedServices = formatServices(response.data);
+        setServices(formattedServices);
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  if (loading) {
+    return (
+      <section id=\"services\" className=\"py-20 relative overflow-hidden\">
+        <div className=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center\">
+          <div className=\"text-white\">Loading services...</div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="services" className="py-20 relative overflow-hidden">
       {/* Background Elements */}
