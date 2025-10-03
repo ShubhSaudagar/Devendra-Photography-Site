@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Heart, Camera, Baby, Briefcase, Video, ArrowRight } from "lucide-react";
-import { services } from "../data/mock";
+import { servicesAPI, formatServices } from "../services/api";
 
 const iconMap = {
   Heart: Heart,
