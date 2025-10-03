@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File
+from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -6,9 +7,10 @@ import os
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional, Dict, Any
 import uuid
 from datetime import datetime
+from bson import ObjectId
 
 
 ROOT_DIR = Path(__file__).parent
@@ -20,37 +22,135 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
-app = FastAPI()
+app = FastAPI(title="D.S.P.Film's Photography API", version="1.0.0")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# Helper function to convert ObjectId to string
+def serialize_doc(doc):
+    if doc is None:
+        return None
+    if isinstance(doc, list):
+        return [serialize_doc(item) for item in doc]
+    if isinstance(doc, dict):
+        if "_id" in doc:
+            doc["_id"] = str(doc["_id"])
+        return {k: serialize_doc(v) for k, v in doc.items()}
+    return doc
 
-# Define Models
-class StatusCheck(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+# Pydantic Models
+class SiteContent(BaseModel):
+    section: str
+    key: str
+    value: str
+    type: str = "text"  # text, html, image_url, number
+    
+class SiteContentCreate(BaseModel):
+    section: str
+    key: str
+    value: str
+    type: str = "text"
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
+class Service(BaseModel):
+    title: str
+    description: str
+    features: List[str]
+    image: str
+    icon: str
+    color: str
+    order: int = 0
+    isActive: bool = True
 
-# Add your routes to the router instead of directly to app
+class ServiceCreate(BaseModel):
+    title: str
+    description: str
+    features: List[str]
+    image: str
+    icon: str
+    color: str
+    order: int = 0
+    isActive: bool = True
+
+class Portfolio(BaseModel):
+    title: str
+    category: str
+    image: str
+    description: str = ""
+    order: int = 0
+    isActive: bool = True
+
+class PortfolioCreate(BaseModel):
+    title: str
+    category: str
+    image: str
+    description: str = ""
+    order: int = 0
+    isActive: bool = True
+
+class Package(BaseModel):
+    name: str
+    price: str
+    duration: str
+    category: str
+    features: List[str]
+    popular: bool = False
+    color: str
+    order: int = 0
+    isActive: bool = True
+
+class PackageCreate(BaseModel):
+    name: str
+    price: str
+    duration: str
+    category: str
+    features: List[str]
+    popular: bool = False
+    color: str
+    order: int = 0
+    isActive: bool = True
+
+class Testimonial(BaseModel):
+    name: str
+    event: str
+    rating: int = 5
+    text: str
+    image: str
+    location: str
+    order: int = 0
+    isActive: bool = True
+
+class TestimonialCreate(BaseModel):
+    name: str
+    event: str
+    rating: int = 5
+    text: str
+    image: str
+    location: str
+    order: int = 0
+    isActive: bool = True
+
+class Inquiry(BaseModel):
+    name: str
+    email: str
+    phone: str = ""
+    eventType: str
+    eventDate: Optional[str] = None
+    message: str = ""
+    status: str = "new"  # new, responded, booked, closed
+
+class InquiryCreate(BaseModel):
+    name: str
+    email: str
+    phone: str = ""
+    eventType: str
+    eventDate: Optional[str] = None
+    message: str = ""
+
+# Basic route
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
-
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.dict()
-    status_obj = StatusCheck(**status_dict)
-    _ = await db.status_checks.insert_one(status_obj.dict())
-    return status_obj
-
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    status_checks = await db.status_checks.find().to_list(1000)
-    return [StatusCheck(**status_check) for status_check in status_checks]
+    return {"message": "D.S.P.Film's Photography API", "version": "1.0.0"}
 
 # Include the router in the main app
 app.include_router(api_router)
