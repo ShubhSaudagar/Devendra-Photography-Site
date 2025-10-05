@@ -50,8 +50,8 @@
     "zod": "^3.22.4"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
+    "start": "GENERATE_SOURCEMAP=false craco start",
+    "build": "GENERATE_SOURCEMAP=false craco build",
     "test": "craco test"
   },
   "browserslist": {
