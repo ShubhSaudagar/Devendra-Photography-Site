@@ -65,8 +65,6 @@ const Testimonials = () => {
         <div className="max-w-5xl mx-auto mb-16">
           <div 
             className="relative bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-lg border border-white/20 rounded-3xl p-8 md:p-12"
-            onMouseEnter={() => setIsAutoPlaying(false)}
-            onMouseLeave={() => setIsAutoPlaying(true)}
           >
             {/* Quote Icon */}
             <div className="absolute top-6 left-6 opacity-20">
