@@ -172,7 +172,7 @@ async def get_content_by_section(section: str):
 @api_router.post("/content")
 async def create_content(content: SiteContentCreate):
     try:
-        content_dict = content.dict()
+        content_dict = content.model_dump()
         content_dict["createdAt"] = datetime.utcnow()
         content_dict["updatedAt"] = datetime.utcnow()
         
@@ -185,7 +185,7 @@ async def create_content(content: SiteContentCreate):
 @api_router.put("/content/{content_id}")
 async def update_content(content_id: str, content: SiteContentCreate):
     try:
-        content_dict = content.dict()
+        content_dict = content.model_dump()
         content_dict["updatedAt"] = datetime.utcnow()
         
         result = await db.site_content.update_one(
@@ -213,7 +213,7 @@ async def get_services():
 @api_router.post("/services")
 async def create_service(service: ServiceCreate):
     try:
-        service_dict = service.dict()
+        service_dict = service.model_dump()
         service_dict["createdAt"] = datetime.utcnow()
         service_dict["updatedAt"] = datetime.utcnow()
         
@@ -226,7 +226,7 @@ async def create_service(service: ServiceCreate):
 @api_router.put("/services/{service_id}")
 async def update_service(service_id: str, service: ServiceCreate):
     try:
-        service_dict = service.dict()
+        service_dict = service.model_dump()
         service_dict["updatedAt"] = datetime.utcnow()
         
         result = await db.services.update_one(
@@ -277,7 +277,7 @@ async def get_portfolio_by_category(category: str):
 @api_router.post("/portfolio")
 async def create_portfolio_item(portfolio: PortfolioCreate):
     try:
-        portfolio_dict = portfolio.dict()
+        portfolio_dict = portfolio.model_dump()
         portfolio_dict["createdAt"] = datetime.utcnow()
         portfolio_dict["updatedAt"] = datetime.utcnow()
         
@@ -290,7 +290,7 @@ async def create_portfolio_item(portfolio: PortfolioCreate):
 @api_router.put("/portfolio/{portfolio_id}")
 async def update_portfolio_item(portfolio_id: str, portfolio: PortfolioCreate):
     try:
-        portfolio_dict = portfolio.dict()
+        portfolio_dict = portfolio.model_dump()
         portfolio_dict["updatedAt"] = datetime.utcnow()
         
         result = await db.portfolio.update_one(
@@ -341,7 +341,7 @@ async def get_packages_by_category(category: str):
 @api_router.post("/packages")
 async def create_package(package: PackageCreate):
     try:
-        package_dict = package.dict()
+        package_dict = package.model_dump()
         package_dict["createdAt"] = datetime.utcnow()
         package_dict["updatedAt"] = datetime.utcnow()
         
@@ -354,7 +354,7 @@ async def create_package(package: PackageCreate):
 @api_router.put("/packages/{package_id}")
 async def update_package(package_id: str, package: PackageCreate):
     try:
-        package_dict = package.dict()
+        package_dict = package.model_dump()
         package_dict["updatedAt"] = datetime.utcnow()
         
         result = await db.packages.update_one(
@@ -397,7 +397,7 @@ async def get_testimonials():
 @api_router.post("/testimonials")
 async def create_testimonial(testimonial: TestimonialCreate):
     try:
-        testimonial_dict = testimonial.dict()
+        testimonial_dict = testimonial.model_dump()
         testimonial_dict["createdAt"] = datetime.utcnow()
         testimonial_dict["updatedAt"] = datetime.utcnow()
         
@@ -410,7 +410,7 @@ async def create_testimonial(testimonial: TestimonialCreate):
 @api_router.put("/testimonials/{testimonial_id}")
 async def update_testimonial(testimonial_id: str, testimonial: TestimonialCreate):
     try:
-        testimonial_dict = testimonial.dict()
+        testimonial_dict = testimonial.model_dump()
         testimonial_dict["updatedAt"] = datetime.utcnow()
         
         result = await db.testimonials.update_one(
@@ -453,7 +453,7 @@ async def get_inquiries():
 @api_router.post("/inquiries")
 async def create_inquiry(inquiry: InquiryCreate):
     try:
-        inquiry_dict = inquiry.dict()
+        inquiry_dict = inquiry.model_dump()
         inquiry_dict["status"] = "new"
         inquiry_dict["createdAt"] = datetime.utcnow()
         inquiry_dict["updatedAt"] = datetime.utcnow()
