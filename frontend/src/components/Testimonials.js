@@ -140,8 +140,8 @@ const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <Card 
               key={testimonial.id} 
-              className={`group border-0 bg-transparent transition-all duration-500 cursor-pointer hover:transform hover:scale-105 ${
-                index === activeTestimonial ? 'ring-2 ring-teal-500' : ''
+              className={`group border-0 bg-transparent transition-all duration-300 cursor-pointer hover:transform hover:scale-102 ${
+                index === activeTestimonial ? 'ring-1 ring-teal-500/50' : ''
               }`}
               onClick={() => setActiveTestimonial(index)}
             >
