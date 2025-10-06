@@ -44,7 +44,7 @@ class SiteContent(BaseModel):
     section: str
     key: str
     value: str
-    type: str = "text"  # text, html, image_url, number
+    type: str = "text"
     
 class SiteContentCreate(BaseModel):
     section: str
