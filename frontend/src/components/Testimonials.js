@@ -5,7 +5,6 @@ import { testimonials } from "../data/mock";
 
 const Testimonials = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   useEffect(() => {
     const interval = setInterval(() => {
