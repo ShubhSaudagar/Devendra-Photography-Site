@@ -9,7 +9,7 @@ const About = () => {
     "500+": Users,
     "1200+": Camera,
     "8+": Award,
-    "25K+": Clock
+    "2L+": Clock
   };
 
   const timelineItems = [
