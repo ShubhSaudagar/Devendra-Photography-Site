@@ -151,6 +151,432 @@ class InquiryCreate(BaseModel):
     eventDate: Optional[str] = None
     message: str = ""
 
+
+# ===== AUTHENTICATION & ADMIN SETUP =====
+
+# Password hashing
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password: str) -> str:
+    return pwd_context.hash(password)
+
+def create_session_token() -> str:
+    return secrets.token_urlsafe(32)
+
+def hash_session_token(token: str) -> str:
+    return hashlib.sha256(token.encode()).hexdigest()
+
+# Get current user from session
+async def get_current_user(request: Request) -> dict:
+    session_token = request.cookies.get("admin_session")
+    if not session_token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    token_hash = hash_session_token(session_token)
+    session = await db.sessions.find_one({
+        "tokenHash": token_hash,
+        "expiresAt": {"$gt": datetime.utcnow()}
+    })
+    
+    if not session:
+        raise HTTPException(status_code=401, detail="Invalid or expired session")
+    
+    user = await db.users.find_one({"userId": session["userId"], "isActive": True})
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+    
+    user_copy = serialize_doc(user)
+    if "password" in user_copy:
+        del user_copy["password"]
+    return user_copy
+
+# Log activity
+async def log_activity(user_id: str, action: str, resource: str, resource_id: str = None, details: dict = None):
+    await db.activity_log.insert_one({
+        "userId": user_id,
+        "action": action,
+        "resource": resource,
+        "resourceId": resource_id,
+        "details": details,
+        "timestamp": datetime.utcnow()
+    })
+
+# Permission check
+PERMISSIONS = {
+    "admin": ["manage_users", "manage_settings", "manage_analytics", "manage_marketing", 
+              "manage_content", "manage_gallery", "manage_blog", "manage_videos", 
+              "manage_offers", "manage_pages", "delete_any"],
+    "editor": ["manage_content", "manage_gallery", "manage_blog", "manage_videos", 
+               "manage_offers", "manage_pages"]
+}
+
+def has_permission(role: str, permission: str) -> bool:
+    return permission in PERMISSIONS.get(role, [])
+
+# ===== ADMIN AUTH ROUTES =====
+
+@api_router.post("/admin/auth/login")
+async def admin_login(request: dict, response: Response):
+    user = await db.users.find_one({"email": request.get("email"), "isActive": True})
+    if not user or not verify_password(request.get("password"), user["password"]):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    session_token = create_session_token()
+    token_hash = hash_session_token(session_token)
+    
+    await db.sessions.insert_one({
+        "tokenHash": token_hash,
+        "userId": user["userId"],
+        "createdAt": datetime.utcnow(),
+        "expiresAt": datetime.utcnow() + timedelta(days=7)
+    })
+    
+    await db.users.update_one({"userId": user["userId"]}, {"$set": {"lastLogin": datetime.utcnow()}})
+    await log_activity(user["userId"], "login", "auth")
+    
+    response.set_cookie(key="admin_session", value=session_token, httponly=True, 
+                       max_age=7*24*60*60, samesite="lax")
+    
+    user_data = serialize_doc(user)
+    if "password" in user_data:
+        del user_data["password"]
+    
+    return {"success": True, "message": "Login successful", "user": user_data}
+
+@api_router.post("/admin/auth/logout")
+async def admin_logout(request: Request, response: Response):
+    session_token = request.cookies.get("admin_session")
+    if session_token:
+        token_hash = hash_session_token(session_token)
+        await db.sessions.delete_one({"tokenHash": token_hash})
+    response.delete_cookie("admin_session")
+    return {"success": True, "message": "Logged out"}
+
+@api_router.get("/admin/auth/me")
+async def get_me(request: Request):
+    user = await get_current_user(request)
+    return {"success": True, "user": user}
+
+# ===== ADMIN USER MANAGEMENT =====
+
+@api_router.get("/admin/users")
+async def get_all_users(request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_users"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    users = await db.users.find().to_list(1000)
+    return {"success": True, "users": serialize_doc(users)}
+
+@api_router.post("/admin/users")
+async def create_admin_user(data: dict, request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_users"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    existing = await db.users.find_one({"email": data.get("email")})
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already exists")
+    
+    user_data = {
+        "userId": str(uuid.uuid4()),
+        "email": data.get("email"),
+        "name": data.get("name"),
+        "password": get_password_hash(data.get("password")),
+        "role": data.get("role", "editor"),
+        "isActive": True,
+        "createdAt": datetime.utcnow(),
+        "lastLogin": None
+    }
+    
+    await db.users.insert_one(user_data)
+    await log_activity(user["userId"], "create", "user", user_data["userId"])
+    return {"success": True, "message": "User created"}
+
+# ===== ADMIN BLOG ROUTES =====
+
+@api_router.get("/admin/blog")
+async def get_all_blogs(request: Request):
+    user = await get_current_user(request)
+    blogs = await db.blog.find().sort("createdAt", -1).to_list(1000)
+    return {"success": True, "blogs": serialize_doc(blogs)}
+
+@api_router.post("/admin/blog")
+async def create_blog(data: dict, request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_blog"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    blog_data = {
+        **data,
+        "blogId": str(uuid.uuid4()),
+        "createdAt": datetime.utcnow(),
+        "updatedAt": datetime.utcnow()
+    }
+    await db.blog.insert_one(blog_data)
+    await log_activity(user["userId"], "create", "blog", blog_data["blogId"])
+    return {"success": True, "message": "Blog created", "blog": serialize_doc(blog_data)}
+
+@api_router.put("/admin/blog/{blog_id}")
+async def update_blog(blog_id: str, data: dict, request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_blog"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    data["updatedAt"] = datetime.utcnow()
+    result = await db.blog.update_one({"blogId": blog_id}, {"$set": data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Blog not found")
+    await log_activity(user["userId"], "update", "blog", blog_id)
+    return {"success": True, "message": "Blog updated"}
+
+@api_router.delete("/admin/blog/{blog_id}")
+async def delete_blog(blog_id: str, request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_blog"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    result = await db.blog.delete_one({"blogId": blog_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Blog not found")
+    await log_activity(user["userId"], "delete", "blog", blog_id)
+    return {"success": True, "message": "Blog deleted"}
+
+# ===== ADMIN VIDEOS ROUTES =====
+
+@api_router.get("/admin/videos")
+async def get_all_videos(request: Request):
+    user = await get_current_user(request)
+    videos = await db.videos.find().sort("order", 1).to_list(1000)
+    return {"success": True, "videos": serialize_doc(videos)}
+
+@api_router.post("/admin/videos")
+async def create_video(data: dict, request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_videos"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    video_data = {
+        **data,
+        "videoId": str(uuid.uuid4()),
+        "createdAt": datetime.utcnow(),
+        "updatedAt": datetime.utcnow()
+    }
+    await db.videos.insert_one(video_data)
+    await log_activity(user["userId"], "create", "video", video_data["videoId"])
+    return {"success": True, "message": "Video created", "video": serialize_doc(video_data)}
+
+@api_router.put("/admin/videos/{video_id}")
+async def update_video(video_id: str, data: dict, request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_videos"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    data["updatedAt"] = datetime.utcnow()
+    result = await db.videos.update_one({"videoId": video_id}, {"$set": data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Video not found")
+    await log_activity(user["userId"], "update", "video", video_id)
+    return {"success": True, "message": "Video updated"}
+
+@api_router.delete("/admin/videos/{video_id}")
+async def delete_video(video_id: str, request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_videos"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    result = await db.videos.delete_one({"videoId": video_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Video not found")
+    await log_activity(user["userId"], "delete", "video", video_id)
+    return {"success": True, "message": "Video deleted"}
+
+# ===== ADMIN OFFERS ROUTES =====
+
+@api_router.get("/admin/offers")
+async def get_all_offers(request: Request):
+    user = await get_current_user(request)
+    offers = await db.offers.find().sort("createdAt", -1).to_list(1000)
+    return {"success": True, "offers": serialize_doc(offers)}
+
+@api_router.post("/admin/offers")
+async def create_offer(data: dict, request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_offers"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    offer_data = {
+        **data,
+        "offerId": str(uuid.uuid4()),
+        "createdAt": datetime.utcnow(),
+        "updatedAt": datetime.utcnow()
+    }
+    await db.offers.insert_one(offer_data)
+    await log_activity(user["userId"], "create", "offer", offer_data["offerId"])
+    return {"success": True, "message": "Offer created", "offer": serialize_doc(offer_data)}
+
+# ===== ADMIN PAGES ROUTES =====
+
+@api_router.get("/admin/pages")
+async def get_all_pages(request: Request):
+    user = await get_current_user(request)
+    pages = await db.pages.find().to_list(1000)
+    return {"success": True, "pages": serialize_doc(pages)}
+
+@api_router.post("/admin/pages")
+async def create_page(data: dict, request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_pages"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    page_data = {
+        **data,
+        "pageId": str(uuid.uuid4()),
+        "createdAt": datetime.utcnow(),
+        "updatedAt": datetime.utcnow()
+    }
+    await db.pages.insert_one(page_data)
+    await log_activity(user["userId"], "create", "page", page_data["pageId"])
+    return {"success": True, "message": "Page created", "page": serialize_doc(page_data)}
+
+# ===== ADMIN MEDIA ROUTES =====
+
+@api_router.get("/admin/media")
+async def get_all_media(request: Request):
+    user = await get_current_user(request)
+    media = await db.media.find().sort("createdAt", -1).to_list(1000)
+    return {"success": True, "media": serialize_doc(media)}
+
+@api_router.post("/admin/media")
+async def upload_media(data: dict, request: Request):
+    user = await get_current_user(request)
+    media_data = {
+        **data,
+        "mediaId": str(uuid.uuid4()),
+        "uploadedBy": user["userId"],
+        "createdAt": datetime.utcnow()
+    }
+    await db.media.insert_one(media_data)
+    await log_activity(user["userId"], "upload", "media", media_data["mediaId"])
+    return {"success": True, "message": "Media uploaded", "media": serialize_doc(media_data)}
+
+@api_router.delete("/admin/media/{media_id}")
+async def delete_media(media_id: str, request: Request):
+    user = await get_current_user(request)
+    result = await db.media.delete_one({"mediaId": media_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Media not found")
+    await log_activity(user["userId"], "delete", "media", media_id)
+    return {"success": True, "message": "Media deleted"}
+
+# ===== ADMIN ANALYTICS ROUTES =====
+
+@api_router.post("/analytics/track")
+async def track_event(data: dict):
+    """Track analytics event"""
+    event_data = {
+        **data,
+        "eventId": str(uuid.uuid4()),
+        "timestamp": datetime.utcnow()
+    }
+    await db.analytics_events.insert_one(event_data)
+    return {"success": True, "message": "Event tracked"}
+
+@api_router.get("/admin/analytics/stats")
+async def get_analytics_stats(request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_analytics"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    # Get statistics
+    total_views = await db.analytics_events.count_documents({"eventType": "page_view"})
+    total_clicks = await db.analytics_events.count_documents({"eventType": "click"})
+    total_inquiries = await db.inquiries.count_documents({})
+    
+    # Get recent page views
+    recent_views = await db.analytics_events.find({"eventType": "page_view"}).sort("timestamp", -1).limit(100).to_list(100)
+    
+    # Top pages
+    pipeline = [
+        {"$match": {"eventType": "page_view"}},
+        {"$group": {"_id": "$page", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 10}
+    ]
+    top_pages = await db.analytics_events.aggregate(pipeline).to_list(10)
+    
+    return {
+        "success": True,
+        "stats": {
+            "totalViews": total_views,
+            "totalClicks": total_clicks,
+            "totalInquiries": total_inquiries,
+            "topPages": top_pages,
+            "recentViews": serialize_doc(recent_views)
+        }
+    }
+
+# ===== ADMIN MARKETING SCRIPTS ROUTES =====
+
+@api_router.get("/admin/marketing/scripts")
+async def get_marketing_scripts(request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_marketing"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    scripts = await db.marketing_scripts.find().to_list(1000)
+    return {"success": True, "scripts": serialize_doc(scripts)}
+
+@api_router.post("/admin/marketing/scripts")
+async def create_marketing_script(data: dict, request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_marketing"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    script_data = {
+        **data,
+        "scriptId": str(uuid.uuid4()),
+        "createdAt": datetime.utcnow(),
+        "updatedAt": datetime.utcnow()
+    }
+    await db.marketing_scripts.insert_one(script_data)
+    await log_activity(user["userId"], "create", "marketing_script", script_data["scriptId"])
+    return {"success": True, "message": "Script added", "script": serialize_doc(script_data)}
+
+@api_router.put("/admin/marketing/scripts/{script_id}")
+async def update_marketing_script(script_id: str, data: dict, request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_marketing"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    data["updatedAt"] = datetime.utcnow()
+    result = await db.marketing_scripts.update_one({"scriptId": script_id}, {"$set": data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Script not found")
+    await log_activity(user["userId"], "update", "marketing_script", script_id)
+    return {"success": True, "message": "Script updated"}
+
+@api_router.delete("/admin/marketing/scripts/{script_id}")
+async def delete_marketing_script(script_id: str, request: Request):
+    user = await get_current_user(request)
+    if not has_permission(user["role"], "manage_marketing"):
+        raise HTTPException(status_code=403, detail="Permission denied")
+    
+    result = await db.marketing_scripts.delete_one({"scriptId": script_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Script not found")
+    await log_activity(user["userId"], "delete", "marketing_script", script_id)
+    return {"success": True, "message": "Script deleted"}
+
+# ===== ACTIVITY LOG ROUTES =====
+
+@api_router.get("/admin/activity-log")
+async def get_activity_log(request: Request, limit: int = 100):
+    user = await get_current_user(request)
+    logs = await db.activity_log.find().sort("timestamp", -1).limit(limit).to_list(limit)
+    return {"success": True, "logs": serialize_doc(logs)}
+
 # Basic route
 @api_router.get("/")
 async def root():
