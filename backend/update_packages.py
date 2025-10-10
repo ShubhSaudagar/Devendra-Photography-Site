@@ -204,7 +204,7 @@ async def update_packages():
     # Also update the services category name
     result = await db.services.update_one(
         {"title": {"$regex": "maternity", "$options": "i"}},
-        {"$set": {"title": "Maternity | Babyshoot & Family", "updatedAt": datetime.utcnow()}}
+        {"$set": {"title": "Maternity | Newborn & Family", "updatedAt": datetime.utcnow()}}
     )
     if result.matched_count > 0:
         print("✅ Updated service category name")
