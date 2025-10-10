@@ -204,8 +204,8 @@ const Footer = () => {
               </div>
               
               <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2 text-gray-400">
-                  <span>Site built by</span>
+                <div className="flex items-center space-x-2 text-gray-400 text-base">
+                  <span className="text-base">Site built by</span>
                   <a 
                     href="https://www.instagram.com/shubhsaudagar/" 
                     target="_blank" 
@@ -215,10 +215,10 @@ const Footer = () => {
                     <img 
                       src="https://customer-assets.emergentagent.com/job_dsp-film-portfolio/artifacts/6b692ram_ShubhSaudagar.jpg" 
                       alt="Shubham Saudagar" 
-                      className="w-6 h-6 rounded-full border border-purple-500/50"
+                      className="w-8 h-8 rounded-full border border-purple-500/50"
                     />
-                    <span className="font-medium">Shubham Saudagar</span>
-                    <Instagram className="w-4 h-4" />
+                    <span className="font-medium text-base">Shubham Saudagar</span>
+                    <Instagram className="w-5 h-5" />
                   </a>
                 </div>
               </div>
