@@ -246,18 +246,6 @@ const Contact = () => {
                       />
                     </div>
                     
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="text-white font-medium">Email Address *</Label>
-                      <Input 
-                        id="email"
-                        type="email"
-                        placeholder="Enter your email"
-                        value={formData.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
-                        required
-                        className="bg-white/10 border-white/20 text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-cyan-400 rounded-xl h-12"
-                      />
-                    </div>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
