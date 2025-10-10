@@ -104,7 +104,7 @@ const Hero = () => {
           {/* Brand Badge */}
           <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-white/10 backdrop-blur-lg">
             <Camera size={20} className="mr-3 text-purple-400" />
-            <span className="text-sm font-medium text-gray-200">Cinematic Photography & Films</span>
+            <span className="text-sm font-medium text-gray-200">Photography | Video Production | Advertising</span>
             <div className="ml-3 flex space-x-1">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} size={14} className="text-yellow-400 fill-current" />
