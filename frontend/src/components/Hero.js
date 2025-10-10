@@ -16,7 +16,7 @@ const Hero = () => {
     { number: "500+", label: "Happy Couples" },
     { number: "1200+", label: "Events Covered" },
     { number: "8+", label: "Years Experience" },
-    { number: "25K+", label: "Photos Captured" }
+    { number: "2L+", label: "Photos Captured" }
   ]);
   const [loading, setLoading] = useState(true);
 
