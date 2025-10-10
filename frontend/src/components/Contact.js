@@ -72,7 +72,6 @@ const Contact = () => {
       // Reset form
       setFormData({
         name: '',
-        email: '',
         phone: '',
         eventType: '',
         eventDate: '',
