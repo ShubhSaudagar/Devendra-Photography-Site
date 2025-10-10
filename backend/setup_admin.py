@@ -36,7 +36,7 @@ async def setup_admin():
             "userId": str(uuid.uuid4()),
             "email": admin_email,
             "name": "Devendra S. Shinde",
-            "password": pwd_context.hash(admin_password),
+            "password": hash_password(admin_password),
             "role": "admin",
             "isActive": True,
             "createdAt": datetime.utcnow(),
