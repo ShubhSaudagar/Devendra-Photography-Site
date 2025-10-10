@@ -114,9 +114,9 @@ const Hero = () => {
 
           {/* Main Heading */}
           <div className="space-y-6">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight">
-              <span className="bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
-                {photographerInfo.brandName}
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
+              <span className="block bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent animate-gradient" style={{fontFamily: "'Playfair Display', serif"}}>
+                DSP Film's
               </span>
             </h1>
             <p className="text-2xl md:text-3xl lg:text-4xl font-light text-gray-300 max-w-4xl mx-auto">
