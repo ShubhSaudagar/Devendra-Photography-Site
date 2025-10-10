@@ -184,9 +184,11 @@ const Packages = () => {
                 )}
                 
                 {/* CTA Button */}
-                <Button 
-                  onClick={scrollToContact}
-                  className={`group relative w-full py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
+                <a 
+                  href="https://wa.me/918308398378?text=Hi%2C%20I'm%20interested%20in%20booking%20the%20package%3A%20"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group relative w-full py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center ${
                     pkg.popular 
                       ? `bg-gradient-to-r ${pkg.color} hover:shadow-lg text-white` 
                       : 'bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40'
@@ -200,7 +202,7 @@ const Packages = () => {
                   {pkg.popular && (
                     <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   )}
-                </Button>
+                </a>
               </CardContent>
             </Card>
           ))}
