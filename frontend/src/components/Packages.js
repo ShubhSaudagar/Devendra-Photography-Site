@@ -1,13 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Check, Star, Sparkles, Crown, ArrowRight } from "lucide-react";
-import { packages } from "../data/mock";
+import axios from "axios";
 
 const Packages = () => {
-  const [selectedCategory, setSelectedCategory] = useState('wedding');
+  const [selectedCategory, setSelectedCategory] = useState('Wedding');
   const [hoveredPackage, setHoveredPackage] = useState(null);
+  const [packages, setPackages] = useState([]);
+  
+  const API_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL;
+
+  useEffect(() => {
+    fetchPackages();
+  }, []);
+
+  const fetchPackages = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/packages`);
+      if (Array.isArray(response.data)) {
+        setPackages(response.data.map(pkg => ({
+          ...pkg,
+          id: pkg.packageId || pkg._id
+        })));
+      }
+    } catch (error) {
+      console.error('Error fetching packages:', error);
+    }
+  };
 
   const categories = [
     { id: 'wedding', label: 'Wedding Packages', color: 'from-rose-500 to-pink-500' },
