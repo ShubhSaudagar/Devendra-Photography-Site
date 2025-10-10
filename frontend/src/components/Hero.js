@@ -22,9 +22,9 @@ const Hero = () => {
 
   // Get photographer info from site content with defaults
   const photographerInfo = {
-    brandName: siteContent.hero?.brand_name || "D.S.P.Film's",
+    brandName: siteContent.hero?.brand_name || "DSP Film's",
     tagline: siteContent.hero?.tagline || "Capturing Life's Precious Moments", 
-    description: siteContent.hero?.description || "Professional cinematographer and photographer specializing in weddings, cinematic photography, newborn & maternity sessions, and commercial projects. Based in Ahilyanagar, Maharashtra, India."
+    description: siteContent.hero?.description || "Expert in Cinematic & Wedding photography, newborn & maternity sessions, and commercial projects. Based in Ahilyanagar & Pune, Maharashtra, India."
   };
 
   useEffect(() => {
