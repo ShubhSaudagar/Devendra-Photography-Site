@@ -203,10 +203,24 @@ const Footer = () => {
                 <span>© {currentYear} {photographerInfo.brandName}. All rights reserved.</span>
               </div>
               
-              <div className="flex items-center space-x-2 text-gray-400">
-                <span>Made with</span>
-                <Heart className="w-4 h-4 text-red-500 fill-current animate-pulse" />
-                <span>for capturing beautiful moments</span>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2 text-gray-400">
+                  <span>Site built by</span>
+                  <a 
+                    href="https://www.instagram.com/shubhsaudagar/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 hover:text-purple-400 transition"
+                  >
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_dsp-film-portfolio/artifacts/6b692ram_ShubhSaudagar.jpg" 
+                      alt="Shubham Saudagar" 
+                      className="w-6 h-6 rounded-full border border-purple-500/50"
+                    />
+                    <span className="font-medium">Shubham Saudagar</span>
+                    <Instagram className="w-4 h-4" />
+                  </a>
+                </div>
               </div>
               
               <button 
