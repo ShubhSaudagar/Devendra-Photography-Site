@@ -158,19 +158,6 @@ const Footer = () => {
                   </div>
                 </a>
                 
-                <a 
-                  href={`mailto:${photographerInfo.email}`}
-                  className="group flex items-start space-x-3 text-gray-400 hover:text-white transition-colors duration-200"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-600/20 to-cyan-600/20 border border-white/10 flex items-center justify-center group-hover:from-blue-600/30 group-hover:to-cyan-600/30 transition-all duration-200">
-                    <Mail className="w-5 h-5 text-cyan-400" />
-                  </div>
-                  <div>
-                    <div className="font-medium">Email</div>
-                    <div className="text-sm">{photographerInfo.email}</div>
-                  </div>
-                </a>
-                
                 <div className="flex items-start space-x-3 text-gray-400">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-white/10 flex items-center justify-center">
                     <MapPin className="w-5 h-5 text-purple-400" />
