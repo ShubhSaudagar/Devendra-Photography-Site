@@ -133,8 +133,8 @@ async def update_packages():
             "packageId": str(uuid.uuid4()),
             "name": "Maternity Package",
             "price": "₹16,000",
-            "duration": "2-3 Hours",
-            "category": "Maternity | Babyshoot & Family",
+            "duration": "",
+            "category": "Maternity | Newborn & Family",
             "features": [
                 "20-30 photos edited",
                 "Photobook album & Couple frame (Complimentary)",
