@@ -75,7 +75,7 @@ const About = () => {
                   <MapPin className="w-5 h-5 text-amber-400" />
                   <div>
                     <div className="text-white font-medium text-sm">Based in</div>
-                    <div className="text-gray-400 text-xs">Ahilyanagar, Maharashtra</div>
+                    <div className="text-gray-400 text-xs">Ahilyanagar & Pune</div>
                   </div>
                 </div>
               </div>
