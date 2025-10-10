@@ -107,13 +107,6 @@ const Contact = () => {
       value: "Quick Message",
       action: "https://wa.me/+918308398378",
       color: "from-green-600 to-emerald-600"
-    },
-    {
-      icon: Mail,
-      title: "Email Us",
-      value: photographerInfo.email,
-      action: `mailto:${photographerInfo.email}`,
-      color: "from-purple-600 to-indigo-600"
     }
   ];
 
