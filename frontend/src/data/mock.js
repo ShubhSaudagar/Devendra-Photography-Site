@@ -6,7 +6,6 @@ export const photographerInfo = {
   tagline: "Capturing Life's Precious Moments",
   description: "Expert in Cinematic & Wedding photography, newborn & maternity sessions, and commercial projects. Based in Ahilyanagar & Pune, Maharashtra, India.",
   phone: "+91 8308398378",
-  email: "contact@dspfilms.com",
   location: "Ahilyanagar & Pune, Maharashtra",
   officeAddress: "1st floor, above Ola EV showroom, opp. Shilpa Garden, Nagar - Pune Highway, Ahilyanagar - 414001",
   experience: "8+ Years",
