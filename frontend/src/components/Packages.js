@@ -134,7 +134,7 @@ const Packages = () => {
                 </div>
                 
                 {/* Features List */}
-                <div className="flex-1 mb-8">
+                <div className="flex-1 mb-6">
                   <ul className="space-y-4">
                     {pkg.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-start text-sm text-gray-300">
@@ -148,6 +148,20 @@ const Packages = () => {
                     ))}
                   </ul>
                 </div>
+                
+                {/* Terms & Conditions */}
+                {pkg.terms && pkg.terms.length > 0 && (
+                  <div className="mb-6 p-4 bg-white/5 rounded-xl border border-white/10">
+                    <p className="text-xs font-semibold text-purple-300 mb-2">Terms & Conditions:</p>
+                    <ul className="space-y-1">
+                      {pkg.terms.map((term, termIndex) => (
+                        <li key={termIndex} className="text-xs text-gray-400 leading-relaxed">
+                          • {term}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 
                 {/* CTA Button */}
                 <Button 
