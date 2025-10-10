@@ -177,8 +177,8 @@ async def update_packages():
             "packageId": str(uuid.uuid4()),
             "name": "Baby Shoot Package - With Video",
             "price": "₹20,000",
-            "duration": "2-3 Hours",
-            "category": "Maternity | Babyshoot & Family",
+            "duration": "",
+            "category": "Maternity | Newborn & Family",
             "features": [
                 "15-20 photos edited",
                 "Cinematic video 2-3 mins",
