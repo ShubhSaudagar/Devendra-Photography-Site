@@ -12,7 +12,6 @@ import { contentAPI, inquiriesAPI, organizeContent } from "../services/api";
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
     phone: '',
     eventType: '',
     eventDate: '',
