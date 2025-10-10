@@ -110,7 +110,7 @@ async def update_packages():
             "packageId": str(uuid.uuid4()),
             "name": "Pre-Wedding Package - Basic",
             "price": "₹23,000",
-            "duration": "Half Day",
+            "duration": "",
             "category": "Pre-Wedding",
             "features": [
                 "30-40 photos edited",
