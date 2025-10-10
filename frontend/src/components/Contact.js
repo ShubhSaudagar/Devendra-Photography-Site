@@ -43,7 +43,6 @@ const Contact = () => {
     name: siteContent.contact?.name || "Devendra S. Shinde",
     brandName: siteContent.hero?.brand_name || "D.S.P.Film's",
     phone: siteContent.contact?.phone || "+91 8308398378",
-    email: siteContent.contact?.email || "contact@dspfilms.com",
     location: siteContent.contact?.location || "Ahilyanagar City, Maharashtra, India",
     officeAddress: siteContent.contact?.office_address || "1st floor, above Ola EV showroom, opp. Shilpa Garden, Nagar - Pune Highway, Ahilyanagar - 414001",
     social: {
