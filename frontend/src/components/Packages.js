@@ -31,14 +31,13 @@ const Packages = () => {
   };
 
   const categories = [
-    { id: 'wedding', label: 'Wedding Packages', color: 'from-rose-500 to-pink-500' },
-    { id: 'prewedding', label: 'Pre-Wedding', color: 'from-purple-500 to-indigo-500' },
-    { id: 'maternity', label: 'Maternity', color: 'from-amber-500 to-orange-500' },
-    { id: 'commercial', label: 'Commercial', color: 'from-slate-500 to-gray-500' }
+    { id: 'Wedding', label: 'Wedding Packages', color: 'from-rose-500 to-pink-500' },
+    { id: 'Pre-Wedding', label: 'Pre-Wedding', color: 'from-purple-500 to-indigo-500' },
+    { id: 'Maternity | Babyshoot & Family', label: 'Maternity & Family', color: 'from-amber-500 to-orange-500' }
   ];
 
   const filteredPackages = packages.filter(pkg => 
-    selectedCategory === 'wedding' ? pkg.category === 'wedding' : pkg.category === selectedCategory
+    pkg.category === selectedCategory
   );
 
   const scrollToContact = () => {
