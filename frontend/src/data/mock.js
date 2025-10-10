@@ -13,8 +13,8 @@ export const photographerInfo = {
   experienceStart: "February 2017",
   social: {
     instagram: "https://www.instagram.com/d.s.p.films/",
-    facebook: "#",
-    youtube: "#"
+    facebook: "https://www.facebook.com/devshindephotography/",
+    youtube: "https://www.youtube.com/@devshindefilms6040/featured"
   }
 };
 
