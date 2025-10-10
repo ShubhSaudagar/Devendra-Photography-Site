@@ -14,8 +14,8 @@ const About = () => {
 
   const timelineItems = [
     { year: "2017", title: "Photography Journey Begins", description: "Started professional photography in February 2017" },
-    { year: "2019", title: "Cinematic Expertise", description: "Specialized in cinematic wedding photography" },
-    { year: "2021", title: "Brand Recognition", description: "Featured in major wedding magazines" },
+    { year: "2018", title: "Cinematic Expertise", description: "Specialized in cinematic wedding photography" },
+    { year: "2019", title: "Brand Recognition", description: "Established brand presence in Maharashtra" },
     { year: "2024", title: "500+ Happy Couples", description: "Milestone achievement in client satisfaction" }
   ];
 
