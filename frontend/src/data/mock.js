@@ -296,7 +296,7 @@ export const aboutInfo = {
     "500+ Satisfied Couples",
     "Expert in Cinematic & Wedding",
     "Featured in Wedding Photography Magazines",
-    "Maternity/ NewBorn & Family Specialist",
+    "Maternity | Newborn & Family Specialist",
     "Based in Ahilyanagar & Pune"
   ],
   image: "https://customer-assets.emergentagent.com/job_dsp-film-portfolio/artifacts/521vfvt4_DevShinde.png"
