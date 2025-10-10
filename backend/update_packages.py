@@ -155,8 +155,8 @@ async def update_packages():
             "packageId": str(uuid.uuid4()),
             "name": "Indoor Baby Shoot Package",
             "price": "₹5,000",
-            "duration": "1-2 Hours",
-            "category": "Maternity | Babyshoot & Family",
+            "duration": "",
+            "category": "Maternity | Newborn & Family",
             "features": [
                 "15-20 photos edited",
                 "Studio setup with props",
