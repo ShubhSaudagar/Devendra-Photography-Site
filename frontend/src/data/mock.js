@@ -48,7 +48,7 @@ export const services = [
   },
   {
     id: 4,
-    title: "Maternity/ NewBorn & Family",
+    title: "Maternity | Newborn & Family",
     description: "Gentle, professional photography for expecting mothers and newborn babies. Safe, comfortable environment for precious family moments.",
     features: ["Maternity Shoots", "Newborn Photography", "Family Portraits", "Baby Milestones", "Safe Environment", "Props & Styling"],
     image: "https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/tfl833jz_8X3A9993%20copy%202.jpg",
