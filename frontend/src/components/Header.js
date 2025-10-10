@@ -44,8 +44,8 @@ const Header = () => {
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <img 
-                  src="https://customer-assets.emergentagent.com/job_capture-moments-22/artifacts/gqst9x71_DSP%20logo.png"
-                  alt="DSP Films Logo"
+                  src="https://customer-assets.emergentagent.com/job_dsp-film-portfolio/artifacts/vciv689o_DSP%20logo.png"
+                  alt="DSP Film's Logo"
                   className="h-12 w-auto object-contain filter brightness-0 invert"
                 />
               </div>
