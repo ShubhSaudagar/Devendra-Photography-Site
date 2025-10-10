@@ -124,11 +124,16 @@ const Services = () => {
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">
-          <div className="inline-flex items-center px-8 py-4 rounded-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-white/10 backdrop-blur-lg hover:from-purple-600/30 hover:to-pink-600/30 transition-all duration-300 cursor-pointer group">
+          <a 
+            href="https://wa.me/918308398378?text=Hi%2C%20I%20need%20a%20custom%20photography%20package" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-8 py-4 rounded-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-white/10 backdrop-blur-lg hover:from-purple-600/30 hover:to-pink-600/30 transition-all duration-300 cursor-pointer group"
+          >
             <Camera className="mr-3 text-purple-400 group-hover:scale-110 transition-transform duration-200" size={20} />
             <span className="text-white font-medium">Need something custom? Let's create it together</span>
             <ArrowRight className="ml-3 text-pink-400 group-hover:translate-x-1 transition-transform duration-200" size={20} />
-          </div>
+          </a>
         </div>
       </div>
     </section>
