@@ -30,7 +30,7 @@ const Portfolio = () => {
     { id: 'wedding', label: 'Wedding & Events', count: portfolio.wedding?.length || 0, color: 'from-rose-500 to-pink-500' },
     { id: 'prewedding', label: 'Pre-Wedding', count: portfolio.prewedding?.length || 0, color: 'from-purple-500 to-indigo-500' },
     { id: 'cinematic', label: 'Cinematic', count: portfolio.cinematic?.length || 0, color: 'from-emerald-500 to-teal-500' },
-    { id: 'maternity', label: 'Maternity | Babyshoot & Family', count: portfolio.maternity?.length || 0, color: 'from-amber-500 to-orange-500' }
+    { id: 'maternity', label: 'Maternity | Newborn & Family', count: portfolio.maternity?.length || 0, color: 'from-amber-500 to-orange-500' }
   ];
 
   const currentPortfolio = portfolio[activeCategory] || [];
