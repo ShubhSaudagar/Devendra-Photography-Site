@@ -78,3 +78,7 @@ env/
 *.env
 *.env.*
 .env.ACTUAL_SECRETS
+-e 
+# Environment files
+*.env
+*.env.*
