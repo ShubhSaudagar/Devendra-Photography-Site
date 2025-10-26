@@ -742,8 +742,13 @@ import shutil
 from pathlib import Path
 
 # Create uploads directory if it doesn't exist
-UPLOAD_DIR = Path(os.environ.get('STORAGE_PATH', '/app/backend/uploads'))
-UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+from pathlib import Path
+import os
+
+BASE_DIR = Path(__file__).resolve().parent
+UPLOAD_DIR = BASE_DIR / "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
 
 @api_router.post("/admin/upload")
 async def upload_file(file: UploadFile = File(...), request: Request = None):
