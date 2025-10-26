@@ -746,8 +746,18 @@ from pathlib import Path
 import os
 
 BASE_DIR = Path(__file__).resolve().parent
-UPLOAD_DIR = BASE_DIR / "uploads"
+from pathlib import Path
+import os
+
+# Base directory of the backend
+BASE_DIR = Path(__file__).resolve().parent
+
+# Read upload directory from environment variable (for future cloud use)
+UPLOAD_DIR = Path(os.getenv("UPLOAD_DIR", BASE_DIR / "uploads"))
+
+# Ensure the folder exists
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+
 
 
 @api_router.post("/admin/upload")
