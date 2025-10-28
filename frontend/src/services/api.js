@@ -8,9 +8,9 @@ const getBackendURL = () => {
     return process.env.REACT_APP_BACKEND_URL;
   }
   if (window.location.hostname.includes('replit.dev')) {
-    return `https://${window.location.hostname.replace(':5000', '')}:8001`;
+    return `https://${window.location.hostname.replace(':5000', '')}:8000`;
   }
-  return 'http://localhost:8001';
+  return 'http://localhost:8000';
 };
 
 const BACKEND_URL = getBackendURL();
