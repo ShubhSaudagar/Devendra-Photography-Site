@@ -1,6 +1,19 @@
 import axios from "axios";
 
-const BACKEND_URL = process.env.REACT_APP_API_URL || process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+const getBackendURL = () => {
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  if (process.env.REACT_APP_BACKEND_URL) {
+    return process.env.REACT_APP_BACKEND_URL;
+  }
+  if (window.location.hostname.includes('replit.dev')) {
+    return `https://${window.location.hostname.replace(':5000', '')}:8001`;
+  }
+  return 'http://localhost:8001';
+};
+
+const BACKEND_URL = getBackendURL();
 const API = BACKEND_URL.includes('/api') ? BACKEND_URL : `${BACKEND_URL}/api`;
 
 // Create axios instance with default config
