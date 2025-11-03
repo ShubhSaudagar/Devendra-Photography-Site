@@ -1,10 +1,13 @@
-# DSP Film's Photography Portfolio Website
+# DSP Film's Photography Portfolio Website + Reusable Template
 
 ## Overview
 
 DSP Film's is a full-stack photography portfolio and business management platform for professional photographer Devendra S. Shinde. The application features a modern, cinematic public-facing website for showcasing photography services, portfolios, and packages, alongside a comprehensive admin panel for content management, client inquiries, and business analytics.
 
 The platform specializes in wedding photography, pre-wedding shoots, cinematic photography, maternity/newborn sessions, and commercial projects, serving clients primarily in Ahilyanagar and Pune, Maharashtra, India.
+
+**NEW: Reusable Template System**  
+This codebase now serves as a production-ready template for generating photography business websites for multiple clients. The `site-generator` tool automates creation of new client sites with just a business name and logo, generating complete websites in under 30 seconds.
 
 **Deployment Status:** 
 - **Replit**: Backend configured and running on port 8000 (November 3, 2025)
@@ -14,9 +17,88 @@ The platform specializes in wedding photography, pre-wedding shoots, cinematic p
   - JWT token management with axios interceptors
 - **Backend Production**: Configured for Render deployment with gunicorn
 
+**Template & Site Generator:**
+- **Web Generator**: Flask app at `site-generator/generator.py` (runs on port 5001)
+- **CLI Generator**: Command-line tool at `site-generator/cli_generator.py`
+- **Auto-generates**: Complete sites with backend, frontend, configs, docs, and deployment files
+- **Time to generate**: 10-30 seconds per client site
+- **Features**: Logo processing, secret generation, database setup, environment configuration
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+
+## Template System Architecture
+
+### Site Generator (November 3, 2025)
+
+**Purpose:** Automated website generation for new photography clients
+
+**Components:**
+1. **Web Interface** (`site-generator/generator.py`)
+   - Flask app with form-based UI
+   - Runs on port 5001
+   - Beautiful gradient interface
+   - Real-time logo preview
+   - One-click generation and download
+
+2. **CLI Tool** (`site-generator/cli_generator.py`)
+   - Command-line interactive prompts
+   - Scriptable and automation-friendly
+   - Same functionality as web interface
+
+**Auto-Generation Features:**
+- Complete project copying (backend + frontend)
+- Business configuration JSON generation
+- Environment files with unique secrets (JWT, emergency key)
+- Logo optimization (3 sizes: logo.png, logo-small.png, favicon.ico)
+- Database name generation from business name
+- Custom README and setup instructions
+- ZIP packaging for delivery
+
+**Generated Site Structure:**
+```
+{client-name}/
+├── backend/          # Complete FastAPI backend
+├── frontend/         # Complete React frontend
+├── config/           # Business configuration
+├── template/         # Documentation
+├── .github/          # Auto-deployment workflows
+├── .env files        # Auto-generated secrets
+└── SETUP_INSTRUCTIONS.txt
+```
+
+**Usage:**
+```bash
+# Web Interface
+cd site-generator && python generator.py
+# Open http://localhost:5001
+
+# CLI
+cd site-generator && python cli_generator.py
+```
+
+**Documentation:**
+- `site-generator/README.md` - Generator documentation
+- `SITE_GENERATOR_GUIDE.md` - Complete usage guide
+- `QUICK_START_GENERATOR.md` - Quick start instructions
+- `TEMPLATE_SUMMARY.md` - Template overview
+
+### Template Documentation
+
+**For Clients:**
+- `template/README.md` - Template overview and features
+- `template/docs/SETUP_GUIDE.md` - Complete setup instructions
+- `template/docs/CUSTOMIZATION_GUIDE.md` - Customization guide
+- `template/docs/DATABASE_SCHEMA.md` - Database structure
+
+**For Deployment:**
+- `GITHUB_DEPLOYMENT_SETUP.md` - Auto-deployment setup
+- `DEPLOYMENT_CHECKLIST.md` - Production checklist
+
+**Template Configuration:**
+- `template/config/business.config.json` - Configuration template
+- `template/scripts/setup_client.sh` - Automated setup script
 
 ## System Architecture
 
