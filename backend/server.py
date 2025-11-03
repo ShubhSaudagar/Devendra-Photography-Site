@@ -169,6 +169,25 @@ def hash_session_token(token: str) -> str:
 
 # Get current user from session
 async def get_current_user(request: Request) -> dict:
+    """
+    Get current user from either session cookie OR JWT token (Authorization header)
+    Supports both authentication methods for flexibility
+    """
+    from auth import verify_token
+    
+    authorization = request.headers.get("Authorization")
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.replace("Bearer ", "")
+        payload = verify_token(token)
+        if payload:
+            user_id = payload.get("userId")
+            user = await db.users.find_one({"userId": user_id, "isActive": True})
+            if user:
+                user_copy = serialize_doc(user)
+                if "password" in user_copy:
+                    del user_copy["password"]
+                return user_copy
+    
     session_token = request.cookies.get("admin_session")
     if not session_token:
         raise HTTPException(status_code=401, detail="Not authenticated")
@@ -264,37 +283,6 @@ async def admin_login(request: dict, response: Response):
         "user": user_data,
         "token": jwt_token  # ✅ frontend can use this for API headers
     }
-
-    user = await db.users.find_one({"email": request.get("email"), "isActive": True})
-    if not user or not verify_password(request.get("password"), user["password"]):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-    
-    session_token = create_session_token()
-    token_hash = hash_session_token(session_token)
-    
-    # Determine session expiry based on "remember me"
-    remember_me = request.get("rememberMe", False)
-    expiry_days = 30 if remember_me else 7
-    max_age = expiry_days * 24 * 60 * 60
-    
-    await db.sessions.insert_one({
-        "tokenHash": token_hash,
-        "userId": user["userId"],
-        "createdAt": datetime.utcnow(),
-        "expiresAt": datetime.utcnow() + timedelta(days=expiry_days)
-    })
-    
-    await db.users.update_one({"userId": user["userId"]}, {"$set": {"lastLogin": datetime.utcnow()}})
-    await log_activity(user["userId"], "login", "auth")
-    
-    response.set_cookie(key="admin_session", value=session_token, httponly=True, 
-                       max_age=max_age, samesite="lax")
-    
-    user_data = serialize_doc(user)
-    if "password" in user_data:
-        del user_data["password"]
-    
-    return {"success": True, "message": "Login successful", "user": user_data}
 
 @api_router.post("/admin/auth/logout")
 async def admin_logout(request: Request, response: Response):

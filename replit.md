@@ -8,7 +8,10 @@ The platform specializes in wedding photography, pre-wedding shoots, cinematic p
 
 **Deployment Status:** 
 - **Replit**: Backend configured and running on port 8000 (November 3, 2025)
+  - JWT + Cookie-based authentication implemented
+  - Auth router included at `/api/admin/auth`
 - **Frontend**: Managed separately, can be deployed to Vercel
+  - JWT token management with axios interceptors
 - **Backend Production**: Configured for Render deployment with gunicorn
 
 ## User Preferences
@@ -110,12 +113,31 @@ Preferred communication style: Simple, everyday language.
 
 ### Authentication & Authorization
 
+**Dual Authentication System (Updated November 3, 2025):**
+1. **Session Cookies** (Primary for web browsers)
+   - HttpOnly, Secure cookies
+   - SameSite='lax' for CSRF protection
+   - Session tokens (32-byte URL-safe random strings)
+   - Token hashing for secure storage (SHA-256)
+   - Session expiration: 7 days (default) or 30 days (remember me)
+
+2. **JWT Tokens** (For API clients and mobile)
+   - HS256 algorithm with secure secret (required environment variable)
+   - 7-day token expiry
+   - Returned on login for client-side storage
+   - Verified via Authorization header (Bearer token)
+   - Claims: sub (email), role, userId
+
+**Authentication Flow:**
+- Login endpoint returns BOTH session cookie AND JWT token
+- `get_current_user()` checks Authorization header first, then falls back to cookie
+- Supports both web (cookie-based) and API (JWT-based) clients
+
 **Admin Authentication:**
 - Email/password login with bcrypt hashing
-- Session tokens (32-byte URL-safe random strings)
-- Token hashing for secure storage (SHA-256)
-- Cookie-based sessions with httpOnly flag
-- Session expiration: 7 days (default) or 30 days (remember me)
+- Dual token generation on successful login
+- Frontend stores JWT in localStorage
+- Axios interceptor adds Authorization header automatically
 
 **Role Permissions:**
 - **Admin Role**: Full access including user management, settings, analytics, marketing
@@ -124,9 +146,11 @@ Preferred communication style: Simple, everyday language.
 
 **Security Features:**
 - Password complexity requirements enforced
+- JWT secret required at startup (no default fallback)
 - Emergency reset endpoint with secret key
 - Activity logging for audit trails
 - CORS restricted to specific origins
+- Automatic 401 handling with redirect to login
 
 ## External Dependencies
 

@@ -19,12 +19,18 @@ from fastapi import APIRouter, HTTPException, Request, Response, status
 from pydantic import BaseModel
 from passlib.context import CryptContext
 from motor.motor_asyncio import AsyncIOMotorClient
+from jose import JWTError, jwt
 
 # ====== CONFIG ======
 MONGO_URL = os.getenv("MONGO_URL")
 DB_NAME = os.getenv("DB_NAME", "dsp_photography")
 SESSION_COOKIE_NAME = "admin_session"
 SESSION_EXPIRE_DAYS = 7  # default expiry for session
+JWT_SECRET = os.getenv("JWT_SECRET")
+if not JWT_SECRET:
+    raise RuntimeError("JWT_SECRET environment variable must be set for security. Generate a strong random secret.")
+JWT_ALGORITHM = "HS256"
+JWT_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # ====== DB ======
@@ -51,6 +57,30 @@ def create_session_token() -> str:
 
 def hash_session_token(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    """
+    Create JWT access token
+    """
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=JWT_EXPIRE_MINUTES)
+    
+    to_encode.update({"exp": expire, "iat": datetime.utcnow()})
+    encoded_jwt = jwt.encode(to_encode, JWT_SECRET, algorithm=JWT_ALGORITHM)
+    return encoded_jwt
+
+def verify_token(token: str) -> Optional[dict]:
+    """
+    Verify and decode JWT token
+    """
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        return payload
+    except JWTError:
+        return None
 
 def _serialize_doc(d):
     if not d:
@@ -95,6 +125,13 @@ async def login(payload: LoginPayload, response: Response):
     # update lastLogin
     await db.users.update_one({"_id": user["_id"]}, {"$set": {"lastLogin": datetime.utcnow()}})
 
+    # Create JWT token
+    jwt_token = create_access_token({
+        "sub": user.get("email"),
+        "role": user.get("role", "editor"),
+        "userId": user.get("userId") or str(user.get("_id"))
+    })
+
     # set cookie
     max_age = expiry_days * 24 * 60 * 60
     response.set_cookie(
@@ -105,7 +142,12 @@ async def login(payload: LoginPayload, response: Response):
         samesite="lax"
     )
 
-    return {"success": True, "message": "Login successful", "user": _serialize_doc(user)}
+    return {
+        "success": True,
+        "message": "Login successful",
+        "user": _serialize_doc(user),
+        "token": jwt_token  # JWT token for Authorization header
+    }
 
 @router.post("/logout")
 async def logout(request: Request, response: Response):

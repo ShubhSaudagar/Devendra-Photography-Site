@@ -1,149 +1,189 @@
-// compatibility API file — uses local mock data and provides legacy exports
-// Replace the existing frontend/src/services/api.js with this file content.
+import axios from "axios";
 
-// Import mock data (you already have frontend/src/data/mock.js)
-import {
-  services,
-  packages,
-  portfolio,
-  testimonials,
-  photographerInfo,
-  aboutInfo,
-} from "../data/mock";
-
-/* ============================
-   New-style async getters
-   ============================ */
-export const getServices = async () => services;
-export const getPackages = async () => packages;
-export const getPortfolio = async () => portfolio;
-export const getTestimonials = async () => testimonials;
-export const getPhotographerInfo = async () => photographerInfo;
-export const getAboutInfo = async () => aboutInfo;
-
-/* ============================
-   Formatters (kept for compatibility)
-   ============================ */
-export const formatServices = (servicesArray) => {
-  return (
-    servicesArray?.map((service, index) => ({
-      id: service.id ?? index,
-      title: service.title,
-      description: service.description,
-      features: service.features,
-      image: service.image,
-      icon: service.icon,
-      color: service.color,
-    })) ?? []
-  );
+const getBackendURL = () => {
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  if (process.env.REACT_APP_BACKEND_URL) {
+    return process.env.REACT_APP_BACKEND_URL;
+  }
+  if (window.location.hostname.includes('replit.dev')) {
+    const host = window.location.hostname.split(':')[0];
+    return `https://${host}:8000`;
+  }
+  return 'http://localhost:8000';
 };
 
-export const formatPackages = (packagesArray) => {
-  return (
-    packagesArray?.map((pkg, index) => ({
-      id: pkg.id ?? index,
-      name: pkg.name,
-      price: pkg.price,
-      duration: pkg.duration,
-      category: pkg.category,
-      features: pkg.features,
-      popular: pkg.popular,
-      color: pkg.color,
-    })) ?? []
-  );
+const BACKEND_URL = getBackendURL();
+const API = BACKEND_URL.includes('/api') ? BACKEND_URL : `${BACKEND_URL}/api`;
+
+const apiClient = axios.create({
+  baseURL: API,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true,
+});
+
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Error:', error.response?.data || error.message);
+    if (error.response?.status === 401) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      if (window.location.pathname.startsWith('/admin')) {
+        window.location.href = '/admin/login';
+      }
+    }
+    throw error;
+  }
+);
+
+export const authAPI = {
+  login: async (email, password, rememberMe = false) => {
+    const response = await apiClient.post('/admin/auth/login', {
+      email,
+      password,
+      rememberMe
+    });
+    
+    if (response.data.success && response.data.token) {
+      localStorage.setItem('authToken', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+    }
+    
+    return response.data;
+  },
+  
+  logout: async () => {
+    try {
+      await apiClient.post('/admin/auth/logout');
+    } finally {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+    }
+  },
+  
+  me: async () => {
+    const response = await apiClient.get('/admin/auth/me');
+    return response.data;
+  },
+  
+  getCurrentUser: () => {
+    const userStr = localStorage.getItem('user');
+    return userStr ? JSON.parse(userStr) : null;
+  },
+  
+  isAuthenticated: () => {
+    return !!localStorage.getItem('authToken');
+  }
 };
 
-export const formatTestimonials = (testimonialsArray) => {
-  return (
-    testimonialsArray?.map((t, index) => ({
-      id: t.id ?? index,
-      name: t.name,
-      event: t.event,
-      rating: t.rating,
-      text: t.text,
-      image: t.image,
-      location: t.location,
-    })) ?? []
-  );
-};
-
-/* ============================
-   Legacy / Compatibility objects
-   (so old imports in components continue to work)
-   ============================ */
 export const contentAPI = {
-  get: async () => {
-    // previously contentAPI.get() returned page-level content — map to photographer info
-    return getPhotographerInfo();
-  },
-};
-
-export const portfolioAPI = {
-  get: async () => {
-    return getPortfolio();
-  },
+  getAll: () => apiClient.get('/content'),
+  getBySection: (section) => apiClient.get(`/content/${section}`),
+  create: (content) => apiClient.post('/content', content),
+  update: (id, content) => apiClient.put(`/content/${id}`, content),
 };
 
 export const servicesAPI = {
-  get: async () => {
-    return getServices();
-  },
+  getAll: () => apiClient.get('/services'),
+  create: (service) => apiClient.post('/services', service),
+  update: (id, service) => apiClient.put(`/services/${id}`, service),
+  delete: (id) => apiClient.delete(`/services/${id}`),
+};
+
+export const portfolioAPI = {
+  getAll: () => apiClient.get('/portfolio'),
+  getByCategory: (category) => apiClient.get(`/portfolio/${category}`),
+  create: (item) => apiClient.post('/portfolio', item),
+  update: (id, item) => apiClient.put(`/portfolio/${id}`, item),
+  delete: (id) => apiClient.delete(`/portfolio/${id}`),
 };
 
 export const packagesAPI = {
-  get: async () => {
-    return getPackages();
-  },
+  getAll: () => apiClient.get('/packages'),
+  getById: (id) => apiClient.get(`/packages/${id}`),
+  create: (pkg) => apiClient.post('/packages', pkg),
+  update: (id, pkg) => apiClient.put(`/packages/${id}`, pkg),
+  delete: (id) => apiClient.delete(`/packages/${id}`),
 };
 
 export const testimonialsAPI = {
-  get: async () => {
-    return getTestimonials();
-  },
+  getAll: () => apiClient.get('/testimonials'),
+  create: (testimonial) => apiClient.post('/testimonials', testimonial),
+  update: (id, testimonial) => apiClient.put(`/testimonials/${id}`, testimonial),
+  delete: (id) => apiClient.delete(`/testimonials/${id}`),
 };
 
-/* inquiriesAPI used to submit contact/inquiry forms.
-   Provide a mock submit that logs and resolves (so components don't crash). */
 export const inquiriesAPI = {
-  submit: async (formData) => {
-    console.log("inquiriesAPI.submit (mock) called:", formData);
-    // return a shape similar to a successful API response
-    return { success: true, message: "Mock inquiry received" };
-  },
-  send: async (formData) => {
-    console.log("inquiriesAPI.send (mock) called:", formData);
-    return { success: true, message: "Mock inquiry sent" };
-  },
+  submit: (data) => apiClient.post('/inquiries', data),
+  getAll: () => apiClient.get('/admin/inquiries'),
+  getById: (id) => apiClient.get(`/admin/inquiries/${id}`),
+  update: (id, data) => apiClient.put(`/admin/inquiries/${id}`, data),
+  delete: (id) => apiClient.delete(`/admin/inquiries/${id}`),
 };
 
-/* simple passthrough helpers for 'organize' functions if components expect them */
-export const organizeContent = (data) => data;
-export const organizePortfolio = (data) => data;
-export const organizeServices = (data) => data;
+export const blogAPI = {
+  getAll: () => apiClient.get('/blog'),
+  getById: (id) => apiClient.get(`/blog/${id}`),
+  create: (post) => apiClient.post('/admin/blog', post),
+  update: (id, post) => apiClient.put(`/admin/blog/${id}`, post),
+  delete: (id) => apiClient.delete(`/admin/blog/${id}`),
+};
 
-/* ============================
-   Unified default export (for compatibility)
-   Some parts of the app might import default API_SERVICES
-   ============================ */
+export const videosAPI = {
+  getAll: () => apiClient.get('/videos'),
+  create: (video) => apiClient.post('/admin/videos', video),
+  update: (id, video) => apiClient.put(`/admin/videos/${id}`, video),
+  delete: (id) => apiClient.delete(`/admin/videos/${id}`),
+};
+
+export const offersAPI = {
+  getAll: () => apiClient.get('/offers'),
+  create: (offer) => apiClient.post('/admin/offers', offer),
+  update: (id, offer) => apiClient.put(`/admin/offers/${id}`, offer),
+  delete: (id) => apiClient.delete(`/admin/offers/${id}`),
+};
+
+export const analyticsAPI = {
+  getDashboard: () => apiClient.get('/admin/analytics/dashboard'),
+  trackEvent: (event) => apiClient.post('/analytics/track', event),
+};
+
+export const settingsAPI = {
+  get: () => apiClient.get('/admin/settings'),
+  update: (settings) => apiClient.put('/admin/settings', settings),
+};
+
 const API_SERVICES = {
-  getServices,
-  getPackages,
-  getPortfolio,
-  getTestimonials,
-  getPhotographerInfo,
-  getAboutInfo,
-  formatServices,
-  formatPackages,
-  formatTestimonials,
+  authAPI,
   contentAPI,
-  portfolioAPI,
   servicesAPI,
+  portfolioAPI,
   packagesAPI,
   testimonialsAPI,
   inquiriesAPI,
-  organizeContent,
-  organizePortfolio,
-  organizeServices,
+  blogAPI,
+  videosAPI,
+  offersAPI,
+  analyticsAPI,
+  settingsAPI,
+  apiClient,
 };
 
 export default API_SERVICES;
