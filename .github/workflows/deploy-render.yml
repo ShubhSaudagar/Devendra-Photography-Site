@@ -1,0 +1,42 @@
+name: Deploy Backend to Render
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - 'render.yaml'
+      - 'requirements.txt'
+      - 'runtime.txt'
+      - '.github/workflows/deploy-render.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to Render
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Notify deployment start
+        run: |
+          echo "🚀 Starting Render deployment for backend..."
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          
+      - name: Deploy to Render
+        uses: JorgeLNJunior/render-deploy@v1.4.6
+        with:
+          service_id: ${{ secrets.RENDER_SERVICE_ID }}
+          api_key: ${{ secrets.RENDER_API_KEY }}
+          wait_deploy: true
+          github_deployment: true
+          deployment_environment: 'production'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Verify deployment
+        run: |
+          echo "✅ Render deployment completed successfully!"
+          echo "Check Render dashboard for build logs showing '✅ Upload directory active'"

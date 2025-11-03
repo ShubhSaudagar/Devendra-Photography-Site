@@ -4,23 +4,29 @@ services:
     env: python
     runtime: python
     pythonVersion: 3.11.9
+    region: oregon
+    plan: starter
     buildCommand: "cd backend && pip install -r requirements.txt"
-    startCommand: "cd backend && gunicorn server:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
+    startCommand: "cd backend && gunicorn server:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --worker-class uvicorn.workers.UvicornWorker"
+    healthCheckPath: /api/health
+    autoDeploy: true
+    branch: main
     envVars:
       - key: MONGO_URL
         sync: false
       - key: DB_NAME
         value: dsp_photography
+      - key: JWT_SECRET
+        sync: false
+      - key: EMERGENCY_RESET_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
       - key: ENVIRONMENT
         value: production
-  - type: web
-    name: dsp-photography-frontend
-    env: static
-    buildCommand: "cd frontend && yarn install && yarn build"
-    staticPublishPath: ./frontend/build
-    envVars:
-      - key: REACT_APP_BACKEND_URL
-        fromService:
-          name: dsp-photography-api
-          type: web
-          property: host
+      - key: PORT
+        value: 8000
+      - key: FRONTEND_URL
+        sync: false

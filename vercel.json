@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "name": "dsp-photography-frontend",
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "frontend/build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/frontend/build/static/$1"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/frontend/build/favicon.ico"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "/frontend/build/manifest.json"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/frontend/build/robots.txt"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/build/index.html"
+    }
+  ],
+  "github": {
+    "enabled": true,
+    "autoAlias": true,
+    "silent": false
+  },
+  "env": {
+    "REACT_APP_BACKEND_URL": "@react_app_backend_url"
+  },
+  "build": {
+    "env": {
+      "REACT_APP_BACKEND_URL": "@react_app_backend_url"
+    }
+  }
+}
