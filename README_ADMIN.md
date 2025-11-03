@@ -6,15 +6,29 @@ Premium modern admin panel with glass-morphism design for managing your photogra
 
 ---
 
-## 🔐 Admin Login Credentials
+## 🔐 Admin Login Setup
 
-**Admin Portal URL:** `http://localhost:3000/admin`
+**Admin Portal URL:** `http://localhost:3000/admin` (local) or your deployed frontend URL + `/admin`
 
-**Credentials:**
-- **Email:** `devshinde45@gmail.com`
-- **Password:** `DSPAdmin@2025!`
+### Setting Up Admin Credentials
 
-⚠️ **IMPORTANT:** Change the password after first login for security!
+For security reasons, admin credentials are NOT stored in code. To create your admin account:
+
+1. **Use the setup script:**
+   ```bash
+   cd backend
+   python setup_admin.py
+   ```
+   
+2. **Or use the emergency reset endpoint** (requires `EMERGENCY_RESET_KEY` environment variable):
+   - Send a POST request to `/api/admin/auth/emergency-reset` with your emergency reset key
+   - This will create/reset the admin account
+
+⚠️ **SECURITY IMPORTANT:** 
+- Never commit admin credentials to Git
+- Store passwords securely using environment variables
+- Change default passwords immediately
+- Use strong, unique passwords for production
 
 ---
 

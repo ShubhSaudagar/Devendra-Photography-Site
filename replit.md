@@ -6,7 +6,10 @@ DSP Film's is a full-stack photography portfolio and business management platfor
 
 The platform specializes in wedding photography, pre-wedding shoots, cinematic photography, maternity/newborn sessions, and commercial projects, serving clients primarily in Ahilyanagar and Pune, Maharashtra, India.
 
-**Deployment Status:** Migrated to Replit on October 28, 2025. The application runs successfully with backend on port 8000 and frontend on port 5000.
+**Deployment Status:** 
+- **Replit**: Backend configured and running on port 8000 (November 3, 2025)
+- **Frontend**: Managed separately, can be deployed to Vercel
+- **Backend Production**: Configured for Render deployment with gunicorn
 
 ## User Preferences
 

@@ -1,88 +1,102 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
 
-    <!-- SEO Meta Tags -->
-    <title>DSP Film’s — Photography | Video Production | Advertising</title>
-    <meta name="description" content="DSP Film’s offers premium photography, video production, and advertising services by Dev Shinde Photography." />
-    <meta name="keywords" content="DSP Films, Dev Shinde Photography, Photography, Video Production, Advertising, Pune" />
-    <meta name="author" content="DSP Films" />
+        <!-- SEO Meta Tags -->
+        <title>DSP Film’s — Photography | Video Production | Advertising</title>
+        <meta
+            name="description"
+            content="DSP Film’s offers premium photography, video production, and advertising services by Dev Shinde Photography."
+        />
+        <meta
+            name="keywords"
+            content="DSP Films, Dev Shinde Photography, Photography, Video Production, Advertising, Pune"
+        />
+        <meta name="author" content="DSP Films" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="%PUBLIC_URL%/DSP-logo.png" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/DSP-logo.png" />
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="%PUBLIC_URL%/DSP-logo.png" />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/DSP-logo.png" />
 
-    <!-- Open Graph / Social Sharing -->
-    <meta property="og:title" content="DSP Film’s — Photography | Video Production | Advertising" />
-    <meta property="og:description" content="Dev Shinde Photography — Premium wedding, event, and advertising shoots." />
-    <meta property="og:image" content="%PUBLIC_URL%/DSP-logo.png" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://dspfilms.com" />
+        <!-- Open Graph / Social Sharing -->
+        <meta
+            property="og:title"
+            content="DSP Film’s — Photography | Video Production | Advertising"
+        />
+        <meta
+            property="og:description"
+            content="Dev Shinde Photography — Premium wedding, event, and advertising shoots."
+        />
+        <meta property="og:image" content="%PUBLIC_URL%/DSP-logo.png" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://dspfilms.com" />
 
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        background: #000;
-        color: #fff;
-        font-family: 'Poppins', sans-serif;
-      }
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                background: #000;
+                color: #fff;
+                font-family: "Poppins", sans-serif;
+            }
 
-      #preloader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        transition: opacity 0.8s ease, visibility 0.8s ease;
-      }
+            #preloader {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+                transition:
+                    opacity 0.8s ease,
+                    visibility 0.8s ease;
+            }
 
-      #preloader img {
-        width: 140px;
-        height: auto;
-        opacity: 0;
-        animation: fadeIn 1.2s forwards ease-in-out;
-      }
+            #preloader img {
+                width: 140px;
+                height: auto;
+                opacity: 0;
+                animation: fadeIn 1.2s forwards ease-in-out;
+            }
 
-      @keyframes fadeIn {
-        to {
-          opacity: 1;
-        }
-      }
+            @keyframes fadeIn {
+                to {
+                    opacity: 1;
+                }
+            }
 
-      #root {
-        display: none;
-      }
+            #root {
+                display: none;
+            }
 
-      .loaded #preloader {
-        opacity: 0;
-        visibility: hidden;
-      }
+            .loaded #preloader {
+                opacity: 0;
+                visibility: hidden;
+            }
 
-      .loaded #root {
-        display: block;
-      }
-    </style>
-  </head>
+            .loaded #root {
+                display: block;
+            }
+        </style>
+    </head>
 
-  <body>
-    <div id="preloader">
-      <img src="%PUBLIC_URL%/DSP-logo.png" alt="DSP Films Logo" />
-    </div>
-    <div id="root"></div>
+    <body>
+        <div id="preloader">
+            <img src="%PUBLIC_URL%/DSP-logo.png" alt="DSP Films Logo" />
+        </div>
+        <div id="root"></div>
 
-    <script>
-      window.addEventListener("load", () => {
-        document.body.classList.add("loaded");
-      });
-    </script>
-  </body>
+        <script>
+            window.addEventListener("load", () => {
+                document.body.classList.add("loaded");
+            });
+        </script>
+    </body>
 </html>

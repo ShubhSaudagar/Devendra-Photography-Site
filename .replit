@@ -1,6 +1,4 @@
 modules = ["nodejs-20", "web", "bash", "python-3.11"]
-[agent]
-expertMode = true
 
 [nix]
 channel = "stable-25_05"
@@ -15,14 +13,10 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Backend API"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Frontend"
+args = "Backend"
 
 [[workflows.workflow]]
-name = "Backend API"
+name = "Backend"
 author = "agent"
 
 [workflows.workflow.metadata]
@@ -30,29 +24,56 @@ outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd backend && python -m uvicorn server:app --host 0.0.0.0 --port 8000 --reload"
+args = "python3 main.py"
 waitForPort = 8000
 
-[[workflows.workflow]]
-name = "Frontend"
-author = "agent"
+[[ports]]
+localPort = 3000
+externalPort = 3003
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd frontend && yarn start"
-waitForPort = 5000
+[[ports]]
+localPort = 3001
+externalPort = 4200
 
-[workflows.workflow.metadata]
-outputType = "webview"
+[[ports]]
+localPort = 3002
+externalPort = 5000
+
+[[ports]]
+localPort = 3003
+externalPort = 5173
+
+[[ports]]
+localPort = 3004
+externalPort = 6000
+
+[[ports]]
+localPort = 3005
+externalPort = 6800
 
 [[ports]]
 localPort = 5000
 externalPort = 80
 
 [[ports]]
+localPort = 5001
+externalPort = 3000
+
+[[ports]]
+localPort = 5002
+externalPort = 3001
+
+[[ports]]
+localPort = 5003
+externalPort = 3002
+
+[[ports]]
 localPort = 8000
 externalPort = 8000
 
 [[ports]]
-localPort = 37363
-externalPort = 3000
+localPort = 36893
+externalPort = 8008
+
+[agent]
+expertMode = true

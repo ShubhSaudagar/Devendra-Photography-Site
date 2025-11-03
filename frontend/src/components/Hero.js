@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Camera, Award, Users, Play, Star, ArrowRight } from "lucide-react";
 import { contentAPI, portfolioAPI, organizeContent } from "../services/api";
+import { photographerInfo } from "../data/mock";
 
 const Hero = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

@@ -218,6 +218,53 @@ def has_permission(role: str, permission: str) -> bool:
 
 @api_router.post("/admin/auth/login")
 async def admin_login(request: dict, response: Response):
+    """
+    Enhanced login route — supports JWT + session cookies
+    """
+    from auth import verify_password, create_access_token, hash_session_token, create_session_token
+    user = await db.users.find_one({"email": request.get("email"), "isActive": True})
+    if not user or not verify_password(request.get("password"), user["password"]):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    # ✅ Create both session + JWT token
+    session_token = create_session_token()
+    token_hash = hash_session_token(session_token)
+    jwt_token = create_access_token({"sub": user["email"], "role": user["role"], "userId": user["userId"]})
+
+    remember_me = request.get("rememberMe", False)
+    expiry_days = 30 if remember_me else 7
+    max_age = expiry_days * 24 * 60 * 60
+
+    # Save session in DB
+    await db.sessions.insert_one({
+        "tokenHash": token_hash,
+        "userId": user["userId"],
+        "createdAt": datetime.utcnow(),
+        "expiresAt": datetime.utcnow() + timedelta(days=expiry_days)
+    })
+
+    await db.users.update_one({"userId": user["userId"]}, {"$set": {"lastLogin": datetime.utcnow()}})
+    await log_activity(user["userId"], "login", "auth")
+
+    # 🍪 Set cookie for browser login
+    response.set_cookie(
+        key="admin_session",
+        value=session_token,
+        httponly=True,
+        max_age=max_age,
+        samesite="lax"
+    )
+
+    user_data = serialize_doc(user)
+    user_data.pop("password", None)
+
+    return {
+        "success": True,
+        "message": "Login successful",
+        "user": user_data,
+        "token": jwt_token  # ✅ frontend can use this for API headers
+    }
+
     user = await db.users.find_one({"email": request.get("email"), "isActive": True})
     if not user or not verify_password(request.get("password"), user["password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
@@ -738,25 +785,30 @@ async def update_settings(data: dict, request: Request):
     return {"success": True, "message": "Settings updated"}
 
 # ===== FILE UPLOAD ROUTES =====
+# ===== FILE UPLOAD ROUTES (SAFE FOR RENDER & LOCAL) =====
 import shutil
 from pathlib import Path
-
-# Create uploads directory if it doesn't exist
-from pathlib import Path
 import os
 
-BASE_DIR = Path(__file__).resolve().parent
-from pathlib import Path
-import os
+# 🗂️ Determine safe upload directory
+# Prefer env var -> else fallback to /tmp/uploads (Render safe)
+_upload_env = os.environ.get("UPLOAD_DIR", None)
+if _upload_env:
+    UPLOAD_DIR = Path(_upload_env)
+else:
+    UPLOAD_DIR = Path("/tmp/uploads")
 
-# Base directory of the backend
-BASE_DIR = Path(__file__).resolve().parent
+# ✅ Create folder safely (Render allows /tmp)
+try:
+    UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+except Exception as e:
+    print(f"⚠️ Upload dir error: {e}")
+    # fallback to /tmp/uploads if failed
+    UPLOAD_DIR = Path("/tmp/uploads")
+    UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
-# Read upload directory from environment variable (for future cloud use)
-UPLOAD_DIR = Path(os.getenv("UPLOAD_DIR", BASE_DIR / "uploads"))
+print(f"📂 Using UPLOAD_DIR: {UPLOAD_DIR.resolve()}")
 
-# Ensure the folder exists
-os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 
@@ -1167,6 +1219,9 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# --- Render Log for Upload Directory ---
+logger.info(f"✅ Upload directory active at: {UPLOAD_DIR}")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

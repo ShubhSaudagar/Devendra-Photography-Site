@@ -1,92 +1,84 @@
-# Dependencies
-node_modules/
-/frontend/node_modules
-/backend/__pycache__
-*.pyc
-*.pyo
-*.pyd
-.Python
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
 *.so
-*.egg
-*.egg-info/
-dist/
+.Python
 build/
-
-# Environment files - UPDATED FOR SECURITY
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 .env
-.env.local
-.env.development
-.env.test
-.env.production
-.env.secrets
-backend/.env
-frontend/.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
-# Allow sample/example files
-!.env.sample
-!.env.example
-!backend/.env.sample
-!frontend/.env.example
+# Node / React
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/frontend/build
+/frontend/.pnp
+/frontend/.pnp.js
+/frontend/coverage
 
-# IDEs
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-
-# OS
 .DS_Store
-Thumbs.db
 
 # Logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 logs/
+/tmp/
+
+# Uploads
+/backend/uploads/*
+!/backend/uploads/.gitkeep
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Testing
-coverage/
-.nyc_output
+.coverage
+htmlcov/
 .pytest_cache/
+.tox/
 
-# Build outputs
-.next/
-out/
-build/
-
-# Python virtual environments
-venv/
-.venv/
-ENV/
-env/
-
-# Misc
+# Replit
+.upm/
+.pythonlibs/
 .cache/
-*.orig
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
-.env.ACTUAL_SECRETS
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
+.breakpoints
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# OS
+Thumbs.db
+.DS_Store
