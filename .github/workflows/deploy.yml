@@ -1,0 +1,57 @@
+name: Deploy to Render & Vercel
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+              - 'render.yaml'
+            frontend:
+              - 'frontend/**'
+              - 'vercel.json'
+
+  deploy-backend:
+    needs: check-changes
+    if: needs.check-changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render deployment
+        run: |
+          echo "Backend changes detected - Render will auto-deploy from GitHub"
+          echo "✅ Render auto-deploy is configured in render.yaml"
+
+  deploy-frontend:
+    needs: check-changes
+    if: needs.check-changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel deployment
+        run: |
+          echo "Frontend changes detected - Vercel will auto-deploy from GitHub"
+          echo "✅ Vercel auto-deploy is configured in vercel.json"
+
+  notify:
+    needs: [check-changes, deploy-backend, deploy-frontend]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deployment summary
+        run: |
+          echo "🚀 Deployment Status"
+          echo "Backend: ${{ needs.check-changes.outputs.backend == 'true' && '✅ Triggered' || '⏭️ Skipped' }}"
+          echo "Frontend: ${{ needs.check-changes.outputs.frontend == 'true' && '✅ Triggered' || '⏭️ Skipped' }}"

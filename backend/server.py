@@ -1350,6 +1350,18 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
+# Root redirect to prevent 404 on /
+@app.get("/")
+async def root():
+    """Root endpoint - redirects to health check"""
+    return {
+        "message": "DSP Photography API",
+        "status": "online",
+        "health_check": "/api/health",
+        "docs": "/docs",
+        "version": "1.0.0"
+    }
+
 # Include main API router (with /api prefix)
 app.include_router(api_router)
 

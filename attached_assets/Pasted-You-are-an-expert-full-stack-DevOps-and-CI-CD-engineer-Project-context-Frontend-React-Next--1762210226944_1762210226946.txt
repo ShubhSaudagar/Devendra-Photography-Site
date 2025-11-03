@@ -1,0 +1,57 @@
+You are an expert full-stack DevOps and CI/CD engineer.
+
+Project context:
+- Frontend: React/Next.js (in /frontend)
+- Backend: FastAPI (in /backend)
+- Hosting: Render (backend) + Vercel (frontend)
+- Both linked via GitHub repo: https://github.com/ShubhSaudagar/Devendra-Photography-Site
+- Deployment logs show:
+  - Render backend starts successfully on port 10000 but returns 404
+  - Vercel frontend build fails after 3 seconds due to workflow misconfig
+
+Your task:
+Fix all Render + Vercel deployment issues and confirm successful health check.
+
+✅ OBJECTIVES
+1. **Render backend fix**
+   - Ensure backend binds dynamically to `PORT` via `server.py` or `main.py`
+   - Confirm Gunicorn command in Render settings uses:
+     ```
+     gunicorn backend.server:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+     ```
+   - Add correct `start` command in `Procfile` or `render.yaml`
+   - Add a simple `/api/health` endpoint returning `{ "status": "ok" }`
+   - Fix `UPLOAD_DIR` reference: must point to `/opt/render/project/src/backend/uploads`
+
+2. **Vercel frontend fix**
+   - Ensure `frontend/package.json` has scripts:
+     ```
+     "build": "next build",
+     "start": "next start -p 3000"
+     ```
+   - Add `.vercel.json` at project root:
+     ```json
+     {
+       "buildCommand": "cd frontend && npm install && npm run build",
+       "outputDirectory": "frontend/out",
+       "framework": "nextjs",
+       "env": {
+         "NEXT_PUBLIC_BACKEND_URL": "https://devendra-photography-site.onrender.com"
+       }
+     }
+     ```
+   - Remove `node_modules` from Git history if included.
+
+3. **GitHub Workflow**
+   - Disable failing workflows inside `.github/workflows/`
+   - Add `DEPLOYMENT_FIX_SUMMARY.md` summarizing what was fixed
+   - Ensure future pushes to `main` trigger Vercel + Render autodeploy correctly.
+
+4. **Verification**
+   - Test endpoint: https://devendra-photography-site.onrender.com/api/health → must return {status: "ok"}
+   - Test frontend: https://devendra-photography-site.vercel.app/ → must load correctly
+
+🎯 Deliver:
+- Updated `.vercel.json`, `render.yaml`, or `Procfile`
+- Updated workflow if needed
+- Deployment verification summary (status: ✅ working)

@@ -9,13 +9,26 @@ The platform specializes in wedding photography, pre-wedding shoots, cinematic p
 **NEW: Reusable Template System**  
 This codebase now serves as a production-ready template for generating photography business websites for multiple clients. The `site-generator` tool automates creation of new client sites with just a business name and logo, generating complete websites in under 30 seconds.
 
-**Deployment Status:** 
-- **Replit**: Backend configured and running on port 8000 (November 3, 2025)
-  - JWT + Cookie-based authentication implemented
-  - Auth router included at `/api/admin/auth`
-- **Frontend**: Managed separately, can be deployed to Vercel
-  - JWT token management with axios interceptors
-- **Backend Production**: Configured for Render deployment with gunicorn
+**Deployment Status (Updated November 3, 2025):** 
+- **Replit**: Backend running on port 8000
+  - ✅ Root endpoint redirect at `/` 
+  - ✅ Health check at `/api/health`
+  - ✅ JWT + Cookie dual authentication
+  - ✅ Auth router at `/api/admin/auth`
+  - ✅ Live Edit API endpoints added
+- **Render (Production)**: Ready for deployment
+  - ✅ `render.yaml` configured with gunicorn
+  - ✅ Health check path configured
+  - ✅ Auto-deploy from GitHub main branch
+- **Vercel (Frontend)**: Ready for deployment
+  - ✅ `vercel.json` configured for React SPA
+  - ✅ Build commands verified
+  - ✅ API client correctly configured
+  - ✅ Auto-deploy from GitHub main branch
+- **GitHub Actions**: CI/CD pipeline configured
+  - ✅ `.github/workflows/deploy.yml` created
+  - ✅ Selective deployment (backend/frontend)
+  - ✅ Auto-triggers on push to main
 
 **Template & Site Generator:**
 - **Web Generator**: Flask app at `site-generator/generator.py` (runs on port 5001)

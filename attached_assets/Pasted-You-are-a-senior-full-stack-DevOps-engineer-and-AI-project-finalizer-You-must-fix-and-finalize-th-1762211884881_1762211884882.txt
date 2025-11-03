@@ -1,0 +1,156 @@
+You are a senior full-stack DevOps engineer and AI project finalizer. 
+You must fix and finalize the **Devendra Photography Site** in ONE efficient run (to minimize Replit Agent credits).
+
+────────────────────────────
+📦 PROJECT OVERVIEW
+- GitHub repo: https://github.com/ShubhSaudagar/Devendra-Photography-Site
+- Backend: FastAPI (folder: /backend)
+- Frontend: React/Next.js (folder: /frontend)
+- Hosting: Backend on Render, Frontend on Vercel
+- Database: MongoDB Atlas (env vars added)
+- Auth: JWT + Cookies (login credentials already set)
+- Admin URL: https://dspfilms.com/admin
+- Current issue: 
+  - Render shows 404 on /api routes.
+  - Vercel deployment fails.
+  - Public site not showing dynamic sections (Portfolio, Packages, Gallery, etc.)
+  - Needs safe live editing and admin panel integration.
+
+────────────────────────────
+🎯 OBJECTIVE
+Fix backend & frontend deployments, restore all dynamic components, ensure MongoDB data loads, 
+and enable a safe, lightweight admin panel with live preview editing for text/images/numbers only.
+
+────────────────────────────
+🧩 STEP 1: BACKEND (Render)
+1. Ensure correct start command in `render.yaml` or `Procfile`:
+startCommand: gunicorn backend.server:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+
+markdown
+Copy code
+2. Ensure FastAPI `server.py` or `main.py` exposes:
+- `/api/health` returning `{ "status": "ok" }`
+- `/api/admin/auth` for login
+- `/api/content/*` routes for Portfolio, Packages, Gallery, etc.
+3. Add root redirect `/` → `/api/health` to prevent 404.
+4. Log message on startup:
+`✅ Upload directory active at: backend/uploads`
+5. Verify MongoDB connection and seed default data if empty.
+6. Confirm backend builds and runs on Render without manual restart.
+
+────────────────────────────
+🎨 STEP 2: FRONTEND (Vercel)
+1. Update frontend/package.json build scripts:
+"build": "next build",
+"start": "next start -p 3000"
+
+css
+Copy code
+2. Add `.vercel.json` in project root:
+```json
+{
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "framework": "nextjs",
+  "outputDirectory": "frontend/.next",
+  "env": {
+    "NEXT_PUBLIC_BACKEND_URL": "https://devendra-photography-site.onrender.com"
+  }
+}
+Fix API calls in React to use process.env.NEXT_PUBLIC_BACKEND_URL instead of process.env directly.
+
+Re-enable dynamic sections (Portfolio, Gallery, Packages, Cards) to fetch from backend APIs.
+
+Ensure images load from /uploads correctly.
+
+After build, verify public site fully renders data (not mock).
+
+────────────────────────────
+🛠 STEP 3: ADMIN PANEL (SAFE LIVE EDITING)
+Implement secure, lightweight “Safe Editing Mode”:
+
+Editable content: text, numbers, headings, paragraphs, and logo upload only.
+
+Exclude heavy editors or HTML blocks.
+
+Add live preview panel using iframe or content refresh.
+
+Modules: Pages, Gallery, Packages, Offers, Blog, Bookings.
+
+Features:
+✅ CRUD + autosave
+✅ Role-based access (Admin, Editor)
+✅ Light/dark theme toggle
+✅ JWT authentication check on all protected routes
+✅ Footer: “© 2025 DSP Films. Developed by Shubh Saudagar.”
+
+Security: Validate JWT and CSRF on all admin API routes.
+
+────────────────────────────
+🚀 STEP 4: CI/CD & DEPLOYMENT
+
+Fix GitHub Actions for Render + Vercel autodeploy.
+
+Remove broken jobs, keep one deploy workflow per platform.
+
+Push updates automatically with:
+
+sql
+Copy code
+git add .
+git commit -m "final: fixed backend+frontend deployments and admin panel"
+git push origin main
+Trigger automatic redeploy on Render + Vercel.
+
+Verify:
+✅ Backend: https://devendra-photography-site.onrender.com/api/health → {"status":"ok"}
+✅ Frontend: https://devendra-photography-site.vercel.app → loads full site
+✅ Admin: https://dspfilms.com/admin → login & edit work
+
+────────────────────────────
+🔐 STEP 5: LOG & SUMMARY
+Generate a single file DEPLOYMENT_FIX_SUMMARY.md including:
+
+Render backend status
+
+Vercel frontend build status
+
+Admin panel test result
+
+MongoDB connection result
+
+Health URLs for verification
+
+────────────────────────────
+⚙️ CONSTRAINTS
+
+Do NOT use any heavy visual editor library
+
+Keep free-tier compatibility (Render, Vercel, Replit)
+
+No dependency bloat or unnecessary rebuilds
+
+Reuse existing Mongo data models
+
+Maintain responsive UI & SEO metadata
+
+────────────────────────────
+✅ GOAL COMPLETION CRITERIA
+
+Both sites deploy successfully
+
+Dynamic sections load correctly from DB
+
+Admin panel safe edit mode works
+
+Deployment summary generated
+
+────────────────────────────
+💬 Final Output
+When done, reply with:
+“✅ All fixed and verified — Render, Vercel, and Admin live.”
+and include the two working live URLs.
+
+Execute everything in one pass for minimal Replit credit usage.
+
+yaml
+Copy code
