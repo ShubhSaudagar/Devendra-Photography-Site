@@ -1189,6 +1189,16 @@ async def delete_inquiry(inquiry_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# Health check endpoint (for Render monitoring)
+@api_router.get("/health")
+async def health_check():
+    """Health check endpoint for deployment monitoring"""
+    return {
+        "status": "healthy",
+        "service": "DSP Photography API",
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
 # Include the router in the main app
 app.include_router(api_router)
 
