@@ -1,0 +1,113 @@
+{
+  "business": {
+    "name": "Your Photography Studio",
+    "tagline": "Capturing Life's Beautiful Moments",
+    "description": "Professional photography services for weddings, events, portraits, and commercial projects",
+    "owner": {
+      "name": "Your Name",
+      "email": "hello@yourstudio.com",
+      "phone": "+1 234 567 8900"
+    },
+    "location": {
+      "city": "Your City",
+      "state": "Your State",
+      "country": "Your Country",
+      "timezone": "America/New_York"
+    },
+    "social": {
+      "instagram": "https://instagram.com/yourstudio",
+      "facebook": "https://facebook.com/yourstudio",
+      "twitter": "https://twitter.com/yourstudio",
+      "youtube": "https://youtube.com/@yourstudio"
+    }
+  },
+  "branding": {
+    "logo": "/assets/logo.png",
+    "favicon": "/assets/favicon.ico",
+    "primaryColor": "#1a1a1a",
+    "secondaryColor": "#f5f5f5",
+    "accentColor": "#d4af37",
+    "fontFamily": "Inter, sans-serif"
+  },
+  "features": {
+    "enableBlog": true,
+    "enableVideos": true,
+    "enableBooking": true,
+    "enablePackages": true,
+    "enableTestimonials": true,
+    "enableAnalytics": true,
+    "enableAIContentGeneration": true,
+    "enableMultiLanguage": false
+  },
+  "services": [
+    {
+      "id": "weddings",
+      "name": "Wedding Photography",
+      "enabled": true
+    },
+    {
+      "id": "portraits",
+      "name": "Portrait Photography",
+      "enabled": true
+    },
+    {
+      "id": "events",
+      "name": "Event Photography",
+      "enabled": true
+    },
+    {
+      "id": "commercial",
+      "name": "Commercial Photography",
+      "enabled": true
+    },
+    {
+      "id": "maternity",
+      "name": "Maternity & Newborn",
+      "enabled": false
+    }
+  ],
+  "booking": {
+    "requireApproval": true,
+    "advanceBookingDays": 30,
+    "maxBookingsPerDay": 3,
+    "workingHours": {
+      "start": "09:00",
+      "end": "18:00"
+    },
+    "workingDays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    "depositPercentage": 30,
+    "cancellationPolicyDays": 7
+  },
+  "integrations": {
+    "stripe": {
+      "enabled": false,
+      "publicKey": ""
+    },
+    "googleCalendar": {
+      "enabled": false,
+      "calendarId": ""
+    },
+    "mailchimp": {
+      "enabled": false,
+      "apiKey": "",
+      "listId": ""
+    },
+    "twilioSMS": {
+      "enabled": false,
+      "accountSid": "",
+      "authToken": "",
+      "fromNumber": ""
+    }
+  },
+  "seo": {
+    "metaTitle": "Your Photography Studio | Professional Photography Services",
+    "metaDescription": "Professional photography services for weddings, portraits, events, and commercial projects in Your City",
+    "keywords": [
+      "photography",
+      "wedding photographer",
+      "portrait photographer",
+      "event photography",
+      "professional photographer"
+    ]
+  }
+}
