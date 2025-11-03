@@ -1194,33 +1194,49 @@ async def delete_inquiry(inquiry_id: str):
 async def health_check():
     """Health check endpoint for deployment monitoring"""
     return {
-        "status": "healthy",
+        "status": "ok",
         "service": "DSP Photography API",
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.utcnow().isoformat(),
+        "upload_dir": UPLOAD_DIR
     }
 
-# Include the router in the main app
-app.include_router(api_router)
+# ============================================================================
+# MIDDLEWARE & ROUTER SETUP
+# ============================================================================
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=["*"],
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["*"],
-    expose_headers=["*"],
-)
-
-# Configure logging
+# Configure logging FIRST
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('server')
 
-# --- Render Log for Upload Directory ---
+# Add CORS middleware BEFORE including routers
+app.add_middleware(
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_origins=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
+
+# Include main API router (with /api prefix)
+app.include_router(api_router)
+
+# Include auth router (for /api/admin/auth endpoints)
+try:
+    from auth import router as auth_router
+    app.include_router(auth_router, prefix="/api/admin/auth", tags=["Admin Auth"])
+    logger.info("✅ Auth router included: /api/admin/auth")
+except Exception as e:
+    logger.warning(f"⚠️  Auth router NOT included: {e}")
+
+# Log upload directory status
 logger.info(f"✅ Upload directory active at: {UPLOAD_DIR}")
 
+# Shutdown event
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+    logger.info("Database connection closed")
