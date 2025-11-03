@@ -176,13 +176,21 @@ Preferred communication style: Simple, everyday language.
 - Database name: `dsp_photography`
 
 **Deployment Platforms:**
-- **Current (Replit)**: Full-stack development and hosting
-  - Backend workflow: `cd backend && python -m uvicorn server:app --host 0.0.0.0 --port 8000 --reload`
-  - Frontend workflow: `cd frontend && yarn start`
-  - Ports: Backend (8000), Frontend (5000)
-- **Previous (Vercel + Render)**:
-  - Frontend: Vercel (Create React App build)
-  - Backend: Render (Python 3.11.9)
+- **Development (Replit)**: Full-stack development and testing
+  - Backend workflow: `python3 main.py` (runs on port 8000)
+  - Configured for local development and testing
+- **Production (GitHub Auto-Deploy)**:
+  - **Backend**: Render (Python 3.11.9)
+    - Auto-deploys from `main` branch via GitHub Actions
+    - Gunicorn with Uvicorn workers
+    - Health check at `/api/health`
+  - **Frontend**: Vercel (Create React App)
+    - Auto-deploys from `main` branch via GitHub Actions
+    - Production URL linked to backend API
+- **CI/CD**:
+  - GitHub Actions workflows configured
+  - Selective deployment (backend/frontend based on changed files)
+  - Parallel deployment when both change
 
 **File Storage:**
 - Current: Local filesystem (`/app/backend/uploads`)

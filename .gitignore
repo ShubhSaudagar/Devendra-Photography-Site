@@ -38,6 +38,10 @@ yarn-error.log*
 /frontend/.pnp.js
 /frontend/coverage
 
+# Vercel
+.vercel
+.vercel/
+
 # IDE
 .vscode/
 .idea/
