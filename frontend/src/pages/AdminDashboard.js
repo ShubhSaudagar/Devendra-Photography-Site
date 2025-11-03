@@ -3,7 +3,7 @@ import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios';
 import { 
   LayoutDashboard, Image, Video, Tag, FileText, Users, 
-  Settings, Activity, TrendingUp, LogOut, Menu, X 
+  Settings, Activity, TrendingUp, LogOut, Menu, X, Edit3
 } from 'lucide-react';
 
 // Import admin components (to be created)
@@ -17,10 +17,12 @@ import UserManager from '../components/admin/UserManager';
 import AnalyticsView from '../components/admin/AnalyticsView';
 import MarketingView from '../components/admin/MarketingView';
 import SettingsView from '../components/admin/SettingsView';
+import LiveEditMode from '../components/admin/LiveEditMode';
 
 const AdminDashboard = () => {
   const [user, setUser] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [liveEditMode, setLiveEditMode] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -133,6 +135,23 @@ const AdminDashboard = () => {
 
       {/* Main Content */}
       <main className={`transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
+        {/* Header with Live Edit Toggle */}
+        <div className="sticky top-0 z-30 bg-gradient-to-r from-gray-900/95 to-purple-900/95 backdrop-blur-xl border-b border-white/10 p-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-white">
+              {location.pathname.replace('/admin/', '').replace('-', ' ').toUpperCase() || 'DASHBOARD'}
+            </h1>
+            
+            <button
+              onClick={() => setLiveEditMode(true)}
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+            >
+              <Edit3 size={20} />
+              <span>Live Edit Mode</span>
+            </button>
+          </div>
+        </div>
+
         <div className="p-8">
           <Routes>
             <Route path="/" element={<DashboardHome user={user} />} />
@@ -148,6 +167,11 @@ const AdminDashboard = () => {
           </Routes>
         </div>
       </main>
+
+      {/* Live Edit Mode Modal */}
+      {liveEditMode && (
+        <LiveEditMode onClose={() => setLiveEditMode(false)} />
+      )}
     </div>
   );
 };

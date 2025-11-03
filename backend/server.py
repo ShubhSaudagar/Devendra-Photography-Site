@@ -896,6 +896,135 @@ async def update_content(content_id: str, content: SiteContentCreate):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# ===== LIVE EDIT MODE API =====
+
+@api_router.post("/admin/content/live-update")
+async def live_update_content(request: Request, update_data: dict):
+    """
+    Live content update endpoint for safe live editing
+    Allows authenticated admins to update site content in real-time
+    """
+    try:
+        # Authenticate user
+        current_user = await get_current_user(request)
+        
+        # Check permissions (only admin and editor can edit content)
+        if not has_permission(current_user["role"], "manage_content"):
+            raise HTTPException(status_code=403, detail="Permission denied")
+        
+        # Extract update fields
+        section = update_data.get("section")
+        key = update_data.get("key")
+        value = update_data.get("value")
+        content_type = update_data.get("type", "text")
+        
+        if not section or not key:
+            raise HTTPException(status_code=400, detail="Section and key are required")
+        
+        # Update or create content
+        update_payload = {
+            "section": section,
+            "key": key,
+            "value": value,
+            "type": content_type,
+            "updatedAt": datetime.utcnow(),
+            "updatedBy": current_user["userId"]
+        }
+        
+        result = await db.site_content.update_one(
+            {"section": section, "key": key},
+            {"$set": update_payload},
+            upsert=True
+        )
+        
+        # Log activity
+        await log_activity(
+            current_user["userId"],
+            "live_edit",
+            "site_content",
+            f"{section}.{key}",
+            {"value": value[:100] if isinstance(value, str) else value}
+        )
+        
+        return {
+            "success": True,
+            "message": "Content updated successfully",
+            "section": section,
+            "key": key,
+            "updated": result.matched_count > 0,
+            "created": result.upserted_id is not None
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Update failed: {str(e)}")
+
+@api_router.post("/admin/content/batch-update")
+async def batch_update_content(request: Request, updates: dict):
+    """
+    Batch update multiple content fields at once
+    Useful for saving multiple edits in one request
+    """
+    try:
+        current_user = await get_current_user(request)
+        
+        if not has_permission(current_user["role"], "manage_content"):
+            raise HTTPException(status_code=403, detail="Permission denied")
+        
+        updates_list = updates.get("updates", [])
+        if not updates_list:
+            raise HTTPException(status_code=400, detail="No updates provided")
+        
+        results = []
+        for update in updates_list:
+            section = update.get("section")
+            key = update.get("key")
+            value = update.get("value")
+            content_type = update.get("type", "text")
+            
+            if section and key:
+                update_payload = {
+                    "section": section,
+                    "key": key,
+                    "value": value,
+                    "type": content_type,
+                    "updatedAt": datetime.utcnow(),
+                    "updatedBy": current_user["userId"]
+                }
+                
+                result = await db.site_content.update_one(
+                    {"section": section, "key": key},
+                    {"$set": update_payload},
+                    upsert=True
+                )
+                
+                results.append({
+                    "section": section,
+                    "key": key,
+                    "success": True
+                })
+        
+        # Log batch activity
+        await log_activity(
+            current_user["userId"],
+            "batch_live_edit",
+            "site_content",
+            None,
+            {"count": len(results)}
+        )
+        
+        return {
+            "success": True,
+            "message": f"Updated {len(results)} content items",
+            "results": results
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Batch update failed: {str(e)}")
+
 # Services APIs
 @api_router.get("/services")
 async def get_services():
