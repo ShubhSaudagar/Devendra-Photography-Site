@@ -2,27 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { 
-  LayoutDashboard, Image, Video, Tag, FileText, Users, 
-  Settings, Activity, TrendingUp, LogOut, Menu, X, Edit3
+  LayoutDashboard, Image, Package, LogOut, Menu, X
 } from 'lucide-react';
 
-// Import admin components (to be created)
 import DashboardHome from '../components/admin/DashboardHome';
 import GalleryManager from '../components/admin/GalleryManager';
-import VideoManager from '../components/admin/VideoManager';
-import BlogManager from '../components/admin/BlogManager';
-import OffersManager from '../components/admin/OffersManager';
-import PagesManager from '../components/admin/PagesManager';
-import UserManager from '../components/admin/UserManager';
-import AnalyticsView from '../components/admin/AnalyticsView';
-import MarketingView from '../components/admin/MarketingView';
-import SettingsView from '../components/admin/SettingsView';
-import LiveEditMode from '../components/admin/LiveEditMode';
+import PackagesManager from '../components/admin/PackagesManager';
 
 const AdminDashboard = () => {
   const [user, setUser] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [liveEditMode, setLiveEditMode] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -50,21 +39,10 @@ const AdminDashboard = () => {
   };
 
   const menuItems = [
-    { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['admin', 'editor'] },
-    { path: '/admin/gallery', icon: Image, label: 'Gallery', roles: ['admin', 'editor'] },
-    { path: '/admin/videos', icon: Video, label: 'Videos', roles: ['admin', 'editor'] },
-    { path: '/admin/blog', icon: FileText, label: 'Blog', roles: ['admin', 'editor'] },
-    { path: '/admin/offers', icon: Tag, label: 'Offers', roles: ['admin', 'editor'] },
-    { path: '/admin/pages', icon: FileText, label: 'Pages', roles: ['admin', 'editor'] },
-    { path: '/admin/analytics', icon: TrendingUp, label: 'Analytics', roles: ['admin'] },
-    { path: '/admin/marketing', icon: Activity, label: 'Marketing', roles: ['admin'] },
-    { path: '/admin/users', icon: Users, label: 'Users', roles: ['admin'] },
-    { path: '/admin/settings', icon: Settings, label: 'Settings', roles: ['admin'] },
+    { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { path: '/admin/packages', icon: Package, label: 'Packages' },
+    { path: '/admin/gallery', icon: Image, label: 'Gallery' },
   ];
-
-  const filteredMenuItems = menuItems.filter(item => 
-    item.roles.includes(user?.role)
-  );
 
   if (!user) return null;
 
@@ -93,7 +71,7 @@ const AdminDashboard = () => {
 
           {/* Menu Items */}
           <nav className="flex-1 overflow-y-auto p-4 space-y-2">
-            {filteredMenuItems.map((item) => {
+            {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
               
@@ -135,43 +113,21 @@ const AdminDashboard = () => {
 
       {/* Main Content */}
       <main className={`transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
-        {/* Header with Live Edit Toggle */}
-        <div className="sticky top-0 z-30 bg-gradient-to-r from-gray-900/95 to-purple-900/95 backdrop-blur-xl border-b border-white/10 p-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-white">
-              {location.pathname.replace('/admin/', '').replace('-', ' ').toUpperCase() || 'DASHBOARD'}
-            </h1>
-            
-            <button
-              onClick={() => setLiveEditMode(true)}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
-            >
-              <Edit3 size={20} />
-              <span>Live Edit Mode</span>
-            </button>
-          </div>
-        </div>
-
         <div className="p-8">
           <Routes>
             <Route path="/" element={<DashboardHome user={user} />} />
-            <Route path="/gallery" element={<GalleryManager user={user} />} />
-            <Route path="/videos" element={<VideoManager user={user} />} />
-            <Route path="/blog" element={<BlogManager user={user} />} />
-            <Route path="/offers" element={<OffersManager user={user} />} />
-            <Route path="/pages" element={<PagesManager user={user} />} />
-            <Route path="/analytics" element={<AnalyticsView user={user} />} />
-            <Route path="/marketing" element={<MarketingView user={user} />} />
-            <Route path="/users" element={<UserManager user={user} />} />
-            <Route path="/settings" element={<SettingsView user={user} />} />
+            <Route path="/packages" element={<PackagesManager />} />
+            <Route path="/gallery" element={<GalleryManager />} />
           </Routes>
         </div>
+        
+        {/* Footer */}
+        <footer className="p-6 text-center border-t border-white/10">
+          <p className="text-white/60 text-sm">
+            © 2025 DSP Films. Developed by Shubh Saudagar.
+          </p>
+        </footer>
       </main>
-
-      {/* Live Edit Mode Modal */}
-      {liveEditMode && (
-        <LiveEditMode onClose={() => setLiveEditMode(false)} />
-      )}
     </div>
   );
 };
