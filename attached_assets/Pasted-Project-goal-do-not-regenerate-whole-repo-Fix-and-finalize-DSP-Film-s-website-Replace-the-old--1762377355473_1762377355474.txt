@@ -1,0 +1,305 @@
+Project goal (do not regenerate whole repo):
+Fix and finalize DSP Film’s website:
+
+Replace the old, broken admin with a new, lightweight React Admin (fully working)
+
+Make the public site match https://photopanel.preview.emergentagent.com/ visually and functionally
+
+Wire everything to existing FastAPI backend (Render) and deploy (Vercel + Render)
+
+0) Non-negotiables
+
+Do NOT change env names. Frontend must read:
+
+REACT_APP_BACKEND_URL=https://devendra-photography-site.onrender.com
+
+
+Keep existing Mongo + auth; just add missing models/APIs if needed.
+
+Remove dead/admin UI from Emergent; build a new minimal admin in frontend/src/admin (or reuse /admin route), with clean purple theme.
+
+All admin routes must be JWT-protected using /api/admin/auth/login.
+
+Replace all “Maternity” labels on public site with “Maternity | NewBorn & Family”.
+
+1) Admin panel – must have (simple & solid)
+
+React admin with these pages (client-side routes under /admin):
+
+/admin/login (email+password → JWT saved in HttpOnly cookie if available; else in memory)
+
+/admin/dashboard
+
+/admin/packages (CRUD)
+
+/admin/gallery (Upload, List, Delete)
+
+Global Logout
+
+Footer: © 2025 DSP Films. Developed by Shubh Saudagar.
+
+Packages CRUD UI
+
+Fields: title, subtitle, category, price, features[] (strings), terms[] (strings), ctaText (string, default "Book Now"), waNumber (string), waMessageTemplate (string)
+
+Auto-computed CTA link:
+https://wa.me/${waNumber}?text=${encodeURIComponent(waMessageTemplate)}
+Default: number = 918308398378, template = Hi, I'm interested in the "<title>" package.
+
+Gallery UI
+
+Upload to /api/admin/gallery/upload (multipart), store under backend/uploads, list & delete endpoints.
+
+Auth
+
+Use /api/admin/auth/login and protect admin routes (redirect to login on 401).
+
+2) Backend model & endpoints (only if missing)
+
+Create/ensure Package model in Mongo (collection: packages):
+
+{
+  _id,
+  title: string,
+  subtitle: string,
+  category: "WEDDING" | "PRE-WEDDING" | "MATERNITY_NEWBORN_FAMILY",
+  price: number, // in INR
+  features: string[],
+  terms: string[],
+  ctaText: string, // "Book Now"
+  waNumber: string, // "918308398378"
+  waMessageTemplate: string,
+  createdAt, updatedAt
+}
+
+
+Public endpoints
+
+GET /api/packages → list grouped by category (use same order as seed below)
+
+GET /api/gallery → list images
+
+Admin endpoints (JWT required)
+
+POST /api/admin/packages (create)
+
+PUT /api/admin/packages/:id (update)
+
+DELETE /api/admin/packages/:id (delete)
+
+POST /api/admin/gallery/upload (multipart) → { url, id }
+
+DELETE /api/admin/gallery/:id
+
+Health
+
+keep GET /api/health working.
+
+3) Public site requirements (match the preview exactly)
+
+Replicate layout/spacing/typography of https://photopanel.preview.emergentagent.com/ for these sections:
+
+Hero, About, Packages with details & CTA, Gallery/Portfolio, Contact.
+
+Packages section must render from GET /api/packages.
+
+Each package card shows: title, subtitle, price, features list, terms, and a Book Now button linking to WhatsApp (computed).
+
+In Services/Portfolio/Packages areas, rename “Maternity” to “Maternity | NewBorn & Family”.
+
+4) Seed data (create a one-time admin seeder or migration)
+
+Insert or upsert the following three categories with order preserved:
+
+{
+  "packages": [
+    {
+      "category": "WEDDING",
+      "title": "Wedding Package - Basic",
+      "subtitle": "Perfect for essential wedding coverage",
+      "price": 50000,
+      "features": [
+        "Traditional Photographer (1)",
+        "Traditional Videographer (1)",
+        "Candid Photographer (1)",
+        "30-35 pages photobook album + minibook & Couple Frame",
+        "64 GB Pendrive",
+        "Full Traditional video with 3-4 minutes highlights songs",
+        "3 Reels included"
+      ],
+      "terms": [
+        "75% amount will be taken as ADVANCE",
+        "If order cancelled by your side, ADVANCE will NOT be refunded"
+      ],
+      "ctaText": "Book Now",
+      "waNumber": "918308398378",
+      "waMessageTemplate": "Hi, I'm interested in the \"Wedding Package - Basic\" package."
+    },
+    {
+      "category": "WEDDING",
+      "title": "Wedding Package - Premium",
+      "subtitle": "Premium cinematic + traditional team",
+      "price": 115000,
+      "features": [
+        "Traditional Photographer (1)",
+        "Traditional Videographer (1)",
+        "Candid Photographer (1)",
+        "Cinematographer (1)",
+        "Assistant (1)",
+        "30-35 pages photobook album + minibook & Couple Frame",
+        "128 GB Pendrive",
+        "Full Traditional video with 3-4 minutes highlights songs",
+        "Cinematic video 3-4 min / teaser 45 sec - 1 min",
+        "3 Reels included"
+      ],
+      "terms": [
+        "75% amount will be taken as ADVANCE",
+        "If order cancelled by your side, ADVANCE will NOT be refunded"
+      ],
+      "ctaText": "Book Now",
+      "waNumber": "918308398378",
+      "waMessageTemplate": "Hi, I'm interested in the \"Wedding Package - Premium\" package."
+    },
+
+    {
+      "category": "PRE-WEDDING",
+      "title": "Pre-Wedding Package - Cinematic",
+      "subtitle": "Cinematic storytelling with drone (where permitted)",
+      "price": 49000,
+      "features": [
+        "30-40 photos edited",
+        "Photobook album & Couple Frame (Complimentary)",
+        "Cinematic video 3-4 min",
+        "Drone video (where permitted)",
+        "Teaser 45 sec - 1 min",
+        "3 Reels"
+      ],
+      "terms": [
+        "75% amount will be taken as ADVANCE",
+        "Travelling + Food + Stay charges extra",
+        "If order cancelled by your side, ADVANCE will NOT be refunded"
+      ],
+      "ctaText": "Book Now",
+      "waNumber": "918308398378",
+      "waMessageTemplate": "Hi, I'm interested in the \"Pre-Wedding Package - Cinematic\" package."
+    },
+    {
+      "category": "PRE-WEDDING",
+      "title": "Pre-Wedding Package - Basic",
+      "subtitle": "Photo-first pre-wedding session",
+      "price": 23000,
+      "features": [
+        "30-40 photos edited",
+        "Photobook album & Couple frame (Complimentary)",
+        "3 Reels"
+      ],
+      "terms": [
+        "75% amount will be taken as ADVANCE",
+        "Travelling + Food + Stay charges extra",
+        "If order cancelled by your side, ADVANCE will NOT be refunded"
+      ],
+      "ctaText": "Book Now",
+      "waNumber": "918308398378",
+      "waMessageTemplate": "Hi, I'm interested in the \"Pre-Wedding Package - Basic\" package."
+    },
+
+    {
+      "category": "MATERNITY_NEWBORN_FAMILY",
+      "title": "Maternity Package",
+      "subtitle": "Beautiful maternity portraits",
+      "price": 16000,
+      "features": [
+        "20-30 photos edited",
+        "Photobook album & Couple frame (Complimentary)",
+        "2 Reels"
+      ],
+      "terms": [
+        "75% amount will be taken as ADVANCE",
+        "If order cancelled by your side, ADVANCE will NOT be refunded"
+      ],
+      "ctaText": "Book Now",
+      "waNumber": "918308398378",
+      "waMessageTemplate": "Hi, I'm interested in the \"Maternity Package\"."
+    },
+    {
+      "category": "MATERNITY_NEWBORN_FAMILY",
+      "title": "Indoor Baby Shoot Package",
+      "subtitle": "Cozy studio session with props",
+      "price": 5000,
+      "features": [
+        "15-20 photos edited",
+        "Studio setup with props",
+        "Professional lighting"
+      ],
+      "terms": [
+        "75% amount will be taken as ADVANCE",
+        "If order cancelled by your side, ADVANCE will NOT be refunded"
+      ],
+      "ctaText": "Book Now",
+      "waNumber": "918308398378",
+      "waMessageTemplate": "Hi, I'm interested in the \"Indoor Baby Shoot Package\"."
+    },
+    {
+      "category": "MATERNITY_NEWBORN_FAMILY",
+      "title": "Baby Shoot Package - With Video",
+      "subtitle": "Photo + cinematic short film",
+      "price": 20000,
+      "features": [
+        "15-20 photos edited",
+        "Cinematic video 2-3 mins",
+        "2 Reels",
+        "Props and styling included"
+      ],
+      "terms": [
+        "75% amount will be taken as ADVANCE",
+        "If order cancelled by your side, ADVANCE will NOT be refunded"
+      ],
+      "ctaText": "Book Now",
+      "waNumber": "918308398378",
+      "waMessageTemplate": "Hi, I'm interested in the \"Baby Shoot Package - With Video\"."
+    }
+  ]
+}
+
+
+Create a one-time script (e.g., backend/seed_packages.py) that upserts by title+category. Call it during first boot if no packages exist.
+
+5) Build & Deploy
+
+Ensure frontend builds (prefer yarn if lockfile exists; else npm). Resolve any framer-motion/react-spring conflicts by choosing one (prefer framer-motion v^10+).
+
+Remove dead routes from old admin; keep /admin/* mapped to new React admin.
+
+Finally:
+
+Save all files
+
+git add .
+
+git commit -m "final: production-ready admin rebuild + packages & gallery CRUD + public site parity"
+
+git push origin main
+
+Create /FINAL_REPORT.txt with:
+
+Admin routes list
+
+API list
+
+Credentials variable names
+
+How to add/edit packages
+
+WhatsApp CTA logic
+
+Success criteria
+
+/admin/login accepts the existing admin credentials from secrets.
+
+/admin/packages FULL CRUD works; WhatsApp links correct.
+
+/admin/gallery upload/list/delete works; images show on public gallery.
+
+Public site matches preview; “Maternity” → “Maternity | NewBorn & Family”.
+
+Vercel build green; Render health GET /api/health ok.

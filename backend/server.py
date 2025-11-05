@@ -100,27 +100,29 @@ class PortfolioCreate(BaseModel):
 
 
 class Package(BaseModel):
-    name: str
-    price: str
-    duration: str
-    category: str
+    title: str
+    subtitle: str
+    category: str  # WEDDING, PRE-WEDDING, MATERNITY_NEWBORN_FAMILY
+    price: int  # in INR
     features: List[str]
-    popular: bool = False
-    color: str
+    terms: List[str]
+    ctaText: str = "Book Now"
+    waNumber: str = "918308398378"
+    waMessageTemplate: str
     order: int = 0
     isActive: bool = True
 
 
 class PackageCreate(BaseModel):
-    name: str
-    price: str
-    duration: str
+    title: str
+    subtitle: str
     category: str
+    price: int
     features: List[str]
-    popular: bool = False
-    color: str
-    order: int = 0
-    isActive: bool = True
+    terms: List[str]
+    ctaText: str = "Book Now"
+    waNumber: str = "918308398378"
+    waMessageTemplate: str
 
 
 class Testimonial(BaseModel):
@@ -605,6 +607,117 @@ async def delete_media(media_id: str, request: Request):
         raise HTTPException(status_code=404, detail="Media not found")
     await log_activity(user["userId"], "delete", "media", media_id)
     return {"success": True, "message": "Media deleted"}
+
+
+# ===== ADMIN PACKAGES ROUTES (JWT Protected) =====
+
+@api_router.post("/admin/packages")
+async def admin_create_package(package: PackageCreate, request: Request):
+    user = await get_current_user(request)
+    try:
+        package_dict = package.model_dump()
+        package_dict["createdAt"] = datetime.utcnow()
+        package_dict["updatedAt"] = datetime.utcnow()
+        
+        result = await db.packages.insert_one(package_dict)
+        created_package = await db.packages.find_one({"_id": result.inserted_id})
+        return serialize_doc(created_package)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@api_router.put("/admin/packages/{package_id}")
+async def admin_update_package(package_id: str, package: PackageCreate, request: Request):
+    user = await get_current_user(request)
+    try:
+        package_dict = package.model_dump()
+        package_dict["updatedAt"] = datetime.utcnow()
+        
+        result = await db.packages.update_one(
+            {"_id": ObjectId(package_id)},
+            {"$set": package_dict}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Package not found")
+        
+        updated_package = await db.packages.find_one({"_id": ObjectId(package_id)})
+        return serialize_doc(updated_package)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@api_router.delete("/admin/packages/{package_id}")
+async def admin_delete_package(package_id: str, request: Request):
+    user = await get_current_user(request)
+    try:
+        result = await db.packages.update_one(
+            {"_id": ObjectId(package_id)},
+            {"$set": {
+                "isActive": False,
+                "updatedAt": datetime.utcnow()
+            }}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Package not found")
+        
+        return {"message": "Package deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ===== ADMIN GALLERY ROUTES (JWT Protected) =====
+
+@api_router.post("/admin/gallery/upload")
+async def admin_upload_gallery_image(file: UploadFile = File(...), request: Request = None):
+    if request:
+        user = await get_current_user(request)
+    try:
+        filename = f"{uuid.uuid4()}_{file.filename}"
+        file_path = UPLOAD_DIR / filename
+        
+        content = await file.read()
+        with open(file_path, "wb") as f:
+            f.write(content)
+        
+        gallery_item = {
+            "title": filename,
+            "category": "general",
+            "image": f"/uploads/{filename}",
+            "description": "",
+            "order": 0,
+            "isActive": True,
+            "createdAt": datetime.utcnow(),
+            "updatedAt": datetime.utcnow()
+        }
+        
+        result = await db.portfolio.insert_one(gallery_item)
+        created_item = await db.portfolio.find_one({"_id": result.inserted_id})
+        
+        return serialize_doc(created_item)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@api_router.delete("/admin/gallery/{gallery_id}")
+async def admin_delete_gallery_image(gallery_id: str, request: Request):
+    user = await get_current_user(request)
+    try:
+        result = await db.portfolio.update_one(
+            {"_id": ObjectId(gallery_id)},
+            {"$set": {
+                "isActive": False,
+                "updatedAt": datetime.utcnow()
+            }}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Gallery item not found")
+        
+        return {"message": "Gallery item deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ===== ADMIN ANALYTICS ROUTES =====
@@ -1326,56 +1439,8 @@ async def get_packages_by_category(category: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@api_router.post("/packages")
-async def create_package(package: PackageCreate):
-    try:
-        package_dict = package.model_dump()
-        package_dict["createdAt"] = datetime.utcnow()
-        package_dict["updatedAt"] = datetime.utcnow()
-
-        result = await db.packages.insert_one(package_dict)
-        created_package = await db.packages.find_one(
-            {"_id": result.inserted_id})
-        return serialize_doc(created_package)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@api_router.put("/packages/{package_id}")
-async def update_package(package_id: str, package: PackageCreate):
-    try:
-        package_dict = package.model_dump()
-        package_dict["updatedAt"] = datetime.utcnow()
-
-        result = await db.packages.update_one({"_id": ObjectId(package_id)},
-                                              {"$set": package_dict})
-
-        if result.matched_count == 0:
-            raise HTTPException(status_code=404, detail="Package not found")
-
-        updated_package = await db.packages.find_one(
-            {"_id": ObjectId(package_id)})
-        return serialize_doc(updated_package)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@api_router.delete("/packages/{package_id}")
-async def delete_package(package_id: str):
-    try:
-        result = await db.packages.update_one(
-            {"_id": ObjectId(package_id)},
-            {"$set": {
-                "isActive": False,
-                "updatedAt": datetime.utcnow()
-            }})
-
-        if result.matched_count == 0:
-            raise HTTPException(status_code=404, detail="Package not found")
-
-        return {"message": "Package deleted successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+# Admin Package APIs (JWT Protected)
+# Note: These will be added to admin router in auth.py
 
 
 # Testimonials APIs

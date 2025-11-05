@@ -1,0 +1,113 @@
+You are the Replit Build Agent. 
+
+Goal:
+Rebuild DSP Film’s admin panel and synchronize the public site using the existing backend (FastAPI on Render) and frontend (React on Vercel).
+
+🔧 TASK OVERVIEW
+1️⃣ Remove every old or broken admin component (login, emergency reset, live edit mode, etc.).
+2️⃣ Create a brand-new, lightweight, modern React Admin Panel under `frontend/src/admin` using clean purple/black gradient UI.
+3️⃣ Add complete CRUD + Upload systems:
+   - Packages CRUD (Create / Read / Update / Delete)
+   - Gallery Upload / List / Delete
+   - All API endpoints protected by JWT via `/api/admin/auth/login`
+4️⃣ Public site must exactly match https://photopanel.preview.emergentagent.com/
+   - Same layout, spacing, typography, and packages section
+   - Replace every “Maternity” with “Maternity | NewBorn & Family”
+5️⃣ WhatsApp “Book Now” buttons auto-generate links:
+   `https://wa.me/918308398378?text=Hi, I'm interested in the "<title>" package.`
+6️⃣ Seed database with seven packages across Wedding, Pre-Wedding, and Maternity | NewBorn & Family categories (details given below).
+7️⃣ Keep environment variable unchanged:
+   `REACT_APP_BACKEND_URL=https://devendra-photography-site.onrender.com`
+8️⃣ After implementation, push to GitHub → trigger Vercel + Render auto-deploy.
+
+----------------------------------------------------
+📦 BACKEND (FASTAPI)
+Create/ensure these routes exist and work:
+
+Public:
+- GET /api/health → {status:"ok"}
+- GET /api/packages
+- GET /api/gallery
+
+Admin (Require JWT):
+- POST /api/admin/packages
+- PUT /api/admin/packages/:id
+- DELETE /api/admin/packages/:id
+- POST /api/admin/gallery/upload (multipart)
+- DELETE /api/admin/gallery/:id
+- POST /api/admin/auth/login
+
+Mongo Model `Package`:
+{
+  title, subtitle, category, price, features[], terms[],
+  ctaText, waNumber, waMessageTemplate,
+  createdAt, updatedAt
+}
+
+----------------------------------------------------
+🎨 FRONTEND (REACT)
+Admin Routes:
+- /admin/login  
+- /admin/dashboard  
+- /admin/packages → CRUD UI  
+- /admin/gallery → Upload/List/Delete  
+All protected by JWT.  
+Include Logout and Footer “© 2025 DSP Films. Developed by Shubh Saudagar.”
+
+Packages CRUD UI Fields:
+title | subtitle | category | price | features[] | terms[] | ctaText | waNumber | waMessageTemplate
+
+Gallery UI:
+Drag-and-drop upload → previews → delete option.
+
+Public Site:
+Fetch GET /api/packages to render identical package cards (title, subtitle, price, features, terms, WhatsApp CTA).
+Replicate the exact structure of https://photopanel.preview.emergentagent.com/.
+
+----------------------------------------------------
+🌱 SEED DATA (Insert if missing)
+Use these seven packages:
+
+WEDDING
+- Wedding Package – Basic (₹ 50 000)
+- Wedding Package – Premium (₹ 1 15 000)
+PRE-WEDDING
+- Pre-Wedding Package – Cinematic (₹ 49 000)
+- Pre-Wedding Package – Basic (₹ 23 000)
+MATERNITY | NEWBORN & FAMILY
+- Maternity Package (₹ 16 000)
+- Indoor Baby Shoot Package (₹ 5 000)
+- Baby Shoot Package – With Video (₹ 20 000)
+
+Each entry includes its features, terms, and WhatsApp CTA as previously listed.
+
+----------------------------------------------------
+⚙️ DEPENDENCIES
+Use:
+- React 18 +
+- Axios for API calls
+- Framer-motion v10 + only (if animations needed)
+- React-Router-DOM v6 +
+No extra UI frameworks except Tailwind CSS.
+
+----------------------------------------------------
+🧩 BUILD & DEPLOY
+1️⃣ npm install && npm run build (frontend)
+2️⃣ Confirm no errors in Vercel logs
+3️⃣ `git add .`  
+  `git commit -m "final: admin panel rebuild + packages CRUD + gallery + whatsapp cta"`  
+  `git push origin main`
+4️⃣ Ensure Render health endpoint = OK.
+
+----------------------------------------------------
+✅ SUCCESS CHECKLIST
+- Admin login → works
+- Packages CRUD → create/update/delete OK
+- Gallery upload/delete OK
+- Public site → identical to preview site
+- Maternity → renamed correctly
+- WhatsApp buttons → open correct chat
+- All deployments green
+- Footer credit visible
+
+End of prompt.
