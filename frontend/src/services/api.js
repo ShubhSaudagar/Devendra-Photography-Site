@@ -170,6 +170,48 @@ export const settingsAPI = {
   update: (settings) => apiClient.put('/admin/settings', settings),
 };
 
+export const organizeContent = (contentArray) => {
+  if (!Array.isArray(contentArray)) {
+    return {};
+  }
+  
+  const organized = {};
+  
+  contentArray.forEach(item => {
+    const section = item.section || 'general';
+    const key = item.key || 'value';
+    const value = item.value || '';
+    
+    if (!organized[section]) {
+      organized[section] = {};
+    }
+    
+    organized[section][key] = value;
+  });
+  
+  return organized;
+};
+
+export const getPackages = async () => {
+  const response = await packagesAPI.getAll();
+  return response.data;
+};
+
+export const getPortfolio = async () => {
+  const response = await portfolioAPI.getAll();
+  return response.data;
+};
+
+export const getServices = async () => {
+  const response = await servicesAPI.getAll();
+  return response.data;
+};
+
+export const getTestimonials = async () => {
+  const response = await testimonialsAPI.getAll();
+  return response.data;
+};
+
 const API_SERVICES = {
   authAPI,
   contentAPI,
@@ -183,6 +225,7 @@ const API_SERVICES = {
   offersAPI,
   analyticsAPI,
   settingsAPI,
+  organizeContent,
   apiClient,
 };
 

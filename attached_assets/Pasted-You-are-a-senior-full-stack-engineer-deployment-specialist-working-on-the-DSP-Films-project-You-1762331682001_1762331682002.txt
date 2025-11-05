@@ -1,0 +1,177 @@
+You are a senior full-stack engineer & deployment specialist working on the “DSP Films” project.
+Your task is to fully fix, optimize, and finalize this project for production delivery — including frontend (Vercel), backend (Render), and admin panel (Replit environment).
+
+The repository is already connected in Replit and synced with GitHub:
+Frontend: /frontend (React + Craco)
+Backend: /backend (FastAPI + Uvicorn)
+
+🎯 MAIN OBJECTIVE
+
+Make the entire project fully functional, production-ready, and live-deployable in one go — without requiring further user prompts.
+
+This includes:
+
+Fixing frontend build errors (framer-motion or missing modules).
+
+Ensuring all frontend pages and components (Gallery, Portfolio, Packages, Contact) are visible and styled.
+
+Fixing admin panel login, edit, and dashboard modules (CRUD).
+
+Restoring backend routes and health check /api/health.
+
+Ensuring successful deployment:
+
+Backend → Render (/api/health returns ✅)
+
+Frontend → Vercel (site loads, admin panel loads, no 404s)
+
+Keeping existing environment variables (Render + Replit secrets) intact.
+
+🧠 TASK BREAKDOWN
+1️⃣ Dependency & Build Fix
+
+Identify and resolve all missing dependencies (especially framer-motion).
+
+If framer-motion causes Vercel build failure, auto-replace it with a fallback system:
+
+Prefer react-spring (if available), else use custom /frontend/src/utils/Motion.jsx wrapper.
+
+Update all affected imports automatically.
+
+Regenerate correct lockfiles (package-lock.json and/or yarn.lock).
+
+Add postinstall script to ensure required libs are reinstalled during Vercel deploy.
+
+Clean up deprecated or conflicting packages.
+
+2️⃣ Frontend Repair
+
+Ensure /frontend/src/components/ pages like Gallery, Portfolio, Packages, and Home render fully.
+
+Restore missing imports, asset paths, or images if build omitted them.
+
+Reconnect frontend to backend API URLs using process.env.REACT_APP_BACKEND_URL.
+
+Ensure admin panel /admin loads without blank/white screens.
+
+If necessary, rebuild admin UI minimal animations using available motion library.
+
+Fix all runtime or console errors.
+
+3️⃣ Backend Stability
+
+Verify backend FastAPI app in /backend/server.py includes routes for:
+
+/api/health
+
+/api/admin/auth
+
+/api/pages, /api/gallery, /api/packages, etc.
+
+Ensure MongoDB connection works with existing secrets:
+
+MONGO_URL, DB_NAME, JWT_SECRET, UPLOAD_DIR
+
+Handle 404 root by adding safe default route.
+
+Test API endpoints and return consistent JSON.
+
+4️⃣ Admin Panel (Critical)
+
+Fix login with credentials provided in environment (email + password).
+
+Ensure the emergency reset system (EMERGENCY_RESET_KEY) works.
+
+Restore Dashboard, Gallery, Blog, Packages, and Offers CRUD with live preview.
+
+Enable safe WYSIWYG or inline editing (only the “safe” text/number edit + live preview — no heavy visual editor).
+
+Verify images and logos can be uploaded/changed dynamically.
+
+Protect “Built by Shubh Saudagar” footer (non-editable).
+
+5️⃣ Deployment Checks
+
+Ensure successful backend deploy on Render:
+
+Logs show “✅ Auth router included” and “📂 Upload directory active”.
+
+/api/health returns { status: "ok" }
+
+Ensure successful frontend deploy on Vercel:
+
+No “Module not found” or yarn build failure.
+
+All pages visible online.
+
+Confirm both links (frontend and backend) live and connected.
+
+6️⃣ Cleanup & Delivery
+
+Remove unused dependencies or commented code.
+
+Verify favicon, meta tags, and title are correct (DSP Films | Admin Panel).
+
+Optimize file sizes and images if large.
+
+Add final footer note: © 2025 DSP Films. Developed by Shubh Saudagar.
+
+Push all changes to GitHub branch main.
+
+Trigger both Render & Vercel deployments automatically.
+
+⚙️ ADDITIONAL INSTRUCTIONS
+
+Be efficient with credit usage — batch commits, skip redundant rebuilds.
+
+Prioritize fixing functional errors over cosmetic animations.
+
+If a fix can be done locally instead of API call, prefer local.
+
+Show short summary at the end:
+
+🧾 Changed files list
+
+✅ Backend health check response
+
+🌐 Final live URLs (Vercel + Render)
+
+⚙️ Steps done summary
+
+🔑 Key ENV variables already configured
+
+MONGO_URL, DB_NAME, JWT_SECRET, UPLOAD_DIR
+
+ADMIN_EMAIL, ADMIN_PASSWORD
+
+EMERGENCY_RESET_KEY, EMERGENCY_RESET_LINK
+
+GROQ_API_KEY, GEMINI_API_KEY
+
+⚠️ Rules
+
+Do NOT modify the public branding or domain.
+
+Do NOT remove author credits.
+
+Do NOT use paid APIs or third-party services.
+
+Keep UI layout minimal, modern, responsive, and fast.
+
+All commits must be descriptive and clean.
+
+✅ Final Output Expectation
+
+After your run, provide this structured summary:
+
+✅ DEPLOYMENT STATUS SUMMARY
+├── Frontend (Vercel): ✅ SUCCESS / ❌ FAIL
+├── Backend (Render): ✅ SUCCESS / ❌ FAIL
+├── Admin Panel: ✅ Login / CRUD / Upload working
+├── Pages visible: Gallery, Portfolio, Packages ✅
+├── Health URL: <render_backend>/api/health ✅
+├── Final Commit ID: <hash>
+└── Developed by Shubh Saudagar — Ready for delivery
+
+
+Start now. Fix everything automatically with minimum Replit credits. Return final summary only after both deploys succeed.
