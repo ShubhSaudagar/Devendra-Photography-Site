@@ -53,7 +53,8 @@
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false craco start",
     "build": "GENERATE_SOURCEMAP=false craco build",
-    "test": "craco test"
+    "test": "craco test",
+    "postinstall": "npm install framer-motion"
   },
   "browserslist": {
     "production": [
