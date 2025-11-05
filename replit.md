@@ -2,7 +2,7 @@
 
 ## Overview
 
-DSP Film's is a full-stack photography portfolio and business management platform for professional photographer Devendra S. Shinde. The application features a modern, cinematic public-facing website for showcasing photography services, portfolios, and packages, alongside a comprehensive admin panel for content management, client inquiries, and business analytics.
+DSP Film's is a full-stack photography portfolio and business management platform for professional photographer Devendra S. Shinde. The application features a modern, cinematic public-facing website for showcasing photography services, portfolios, and packages, alongside a **lightweight admin panel** for packages CRUD and gallery management with WhatsApp integration.
 
 The platform specializes in wedding photography, pre-wedding shoots, cinematic photography, maternity/newborn sessions, and commercial projects, serving clients primarily in Ahilyanagar and Pune, Maharashtra, India.
 

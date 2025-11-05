@@ -115,9 +115,9 @@ const AdminDashboard = () => {
       <main className={`transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
         <div className="p-8">
           <Routes>
-            <Route path="/" element={<DashboardHome user={user} />} />
-            <Route path="/packages" element={<PackagesManager />} />
-            <Route path="/gallery" element={<GalleryManager />} />
+            <Route index element={<DashboardHome user={user} />} />
+            <Route path="packages" element={<PackagesManager />} />
+            <Route path="gallery" element={<GalleryManager />} />
           </Routes>
         </div>
         
