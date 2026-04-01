@@ -58,10 +58,25 @@ const Packages = () => {
   );
 
   const handleWhatsAppClick = (pkg) => {
-    const message = pkg.waMessageTemplate || `Hi, I'm interested in the "${pkg.title}" package.`;
-    const waNumber = pkg.waNumber || '918308398378';
+    const waNumber = "918308398378";
+
+    // Build a rich message with all package details
+    const featuresText =
+      pkg.features && pkg.features.length > 0
+        ? pkg.features.map((f) => `  ✔ ${f}`).join("\n")
+        : "";
+
+    const message =
+      `🙏 Hello Devendra bhaiya!\n\n` +
+      `Mujhe aapka *${pkg.title}* book karna hai.\n\n` +
+      `📦 *Package Details:*\n` +
+      `💰 Price: ₹${pkg.price.toLocaleString("en-IN")}\n` +
+      (pkg.subtitle ? `📝 ${pkg.subtitle}\n` : "") +
+      (featuresText ? `\n*Features:*\n${featuresText}\n` : "") +
+      `\nKripya availability confirm karein. 🙏`;
+
     const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   };
 
   return (
@@ -121,28 +136,36 @@ const Packages = () => {
                   </div>
 
                   <h4 className="text-4xl font-extrabold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    ₹ {pkg.price.toLocaleString('en-IN')}
+                    ₹ {pkg.price.toLocaleString("en-IN")}
                   </h4>
 
                   <div className="space-y-4 mb-6">
                     <div>
-                      <p className="text-xs font-semibold text-gray-400 uppercase mb-2">Features</p>
+                      <p className="text-xs font-semibold text-gray-400 uppercase mb-2">
+                        Features
+                      </p>
                       <ul className="space-y-2 text-sm">
-                        {pkg.features && pkg.features.map((feature, i) => (
-                          <li
-                            key={i}
-                            className="flex items-start gap-2 text-gray-300"
-                          >
-                            <Check className="text-green-400 flex-shrink-0 mt-0.5" size={16} />
-                            <span>{feature}</span>
-                          </li>
-                        ))}
+                        {pkg.features &&
+                          pkg.features.map((feature, i) => (
+                            <li
+                              key={i}
+                              className="flex items-start gap-2 text-gray-300"
+                            >
+                              <Check
+                                className="text-green-400 flex-shrink-0 mt-0.5"
+                                size={16}
+                              />
+                              <span>{feature}</span>
+                            </li>
+                          ))}
                       </ul>
                     </div>
 
                     {pkg.terms && pkg.terms.length > 0 && (
                       <div>
-                        <p className="text-xs font-semibold text-gray-400 uppercase mb-2">Terms</p>
+                        <p className="text-xs font-semibold text-gray-400 uppercase mb-2">
+                          Terms
+                        </p>
                         <ul className="space-y-1 text-xs text-gray-400">
                           {pkg.terms.map((term, i) => (
                             <li key={i}>• {term}</li>
@@ -152,12 +175,12 @@ const Packages = () => {
                     )}
                   </div>
 
-                  <Button 
+                  <Button
                     onClick={() => handleWhatsAppClick(pkg)}
                     className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-full py-3 font-semibold hover:from-green-700 hover:to-emerald-700 transition-all flex items-center justify-center gap-2"
                   >
                     <MessageCircle size={18} />
-                    {pkg.ctaText || 'Book Now'}
+                    {pkg.ctaText || "Book Now on WhatsApp 💬"}
                   </Button>
                 </CardContent>
               </Card>
