@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { authAPI } from '../services/api';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -8,27 +8,24 @@ const AdminLogin = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  
-  const API_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
-      const response = await axios.post(
-        `${API_URL}/api/admin/auth/login`,
-        { email, password },
-        { withCredentials: true }
-      );
-
-      if (response.data.success) {
-        localStorage.setItem('admin_user', JSON.stringify(response.data.user));
+      const result = await authAPI.login(email, password);
+      if (result.success) {
         navigate('/admin/dashboard');
+      } else {
+        setError('Login failed. Please check your credentials.');
       }
     } catch (err) {
-      setError(err.response?.data?.detail || 'Login failed. Please check your credentials.');
+      setError(
+        err.response?.data?.detail ||
+        err.response?.data?.message ||
+        'Login failed. Please check your credentials.'
+      );
     } finally {
       setLoading(false);
     }
@@ -37,7 +34,6 @@ const AdminLogin = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black to-blue-900 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
-        {/* Glass morphism card */}
         <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-white/20">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-white mb-2">DSP Film's</h1>
@@ -59,7 +55,7 @@ const AdminLogin = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
-                placeholder="admin@example.com"
+                placeholder="devshinde45@gmail.com"
               />
             </div>
 
@@ -78,19 +74,16 @@ const AdminLogin = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <button
-              onClick={() => alert('Password reset feature coming soon!')}
-              className="text-purple-300 hover:text-purple-200 text-sm transition"
-            >
-              Forgot Password?
-            </button>
+            <p className="text-purple-300/60 text-sm">
+              DSP Film's Admin — Authorized access only
+            </p>
           </div>
         </div>
 
